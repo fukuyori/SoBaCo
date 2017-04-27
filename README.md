@@ -15,9 +15,6 @@
 2. お気に入りに銘柄を登録し、マウスクリックで選択できる機能
 3. チャートの印刷機能。お気に入り銘柄をまとめて印刷も可能。
 4. チャートをＰＤＦで出力する機能
-
-以下は、まだ作成中
-
 5. チャートに書き込みができるペイント機能
 
 使用には、ＰＣにチャートギャラリーがインストールされている必要があります。
@@ -35,14 +32,14 @@
 
 ## Licence
 
-Copyright (c) 2017 SPUMONI.ORG
+Copyright (c) 2017 SPUMONI.ORG  
 GNU AFFERO GENERAL PUBLIC LICENSE Version 3
 
-[iTextSharp](http://sourceforge.net/projects/itextsharp/)
+[iTextSharp](http://sourceforge.net/projects/itextsharp/)  
 GNU AFFERO GENERAL PUBLIC LICENSE Version 3
 
-チャートギャラリー5 for Windows は、パンローリング社の製品です。
+チャートギャラリー5 for Windows は、パンローリング社の製品です。  
 http://www.panrolling.com/pansoft/chtgal/
 
-Pan Active Market Database(TM)については、以下を参照してください。
+Pan Active Market Database(TM)については、以下を参照してください。  
 http://www.panrolling.com/pansoft/amarket/
