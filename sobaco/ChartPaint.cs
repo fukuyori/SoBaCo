@@ -33,7 +33,7 @@ namespace sobaco {
         // アフィン変換行列
         private System.Drawing.Drawing2D.Matrix DrawMatrix;
 
-        enum Tools { None, Pencil, Line, Circle, Text, Eraser };
+        enum Tools { None, Pencil, Line, Circle, Square, SquareFill, Text, Eraser };
         Tools Tool;
 
         int PictureWidth;
@@ -41,6 +41,7 @@ namespace sobaco {
         private Color PenColor;
         private int LineWidth;
         private Pen DrawPen;
+        private SolidBrush DrawBrush;
 
         bool IsDrawing = false;  // true = 描画中
         int DrawStartX;     // Line X 起点
@@ -70,6 +71,8 @@ namespace sobaco {
             PenColor = Color.Black;
             LineWidth = 3;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
+
 
             bUndo.Enabled = false;
             bRedo.Enabled = false;
@@ -145,6 +148,11 @@ namespace sobaco {
             PrintProc();
         }
 
+
+        private void 印刷ToolStripMenuItem_Click(object sender, EventArgs e) {
+            PrintProc();
+        }
+
         private void PrintProc() {
             printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(Pd_PrintPage);
             printDocument1.DefaultPageSettings.Landscape = true;
@@ -201,6 +209,7 @@ namespace sobaco {
                 //選択された色の取得
                 PenColor = chartDialog.Color;
                 DrawPen = new Pen(PenColor, LineWidth);
+                DrawBrush = new SolidBrush(PenColor);
                 if (PenColor == Color.Black)
                     bColor.BackColor = SystemColors.Control;
                 else
@@ -257,6 +266,18 @@ namespace sobaco {
                     DrawStartY = e.Y;
                     Buffer = new Bitmap(pictureBox1.Image);
                     break;
+                case Tools.Square:
+                    IsDrawing = true;
+                    DrawStartX = e.X;
+                    DrawStartY = e.Y;
+                    Buffer = new Bitmap(pictureBox1.Image);
+                    break;
+                case Tools.SquareFill:
+                    IsDrawing = true;
+                    DrawStartX = e.X;
+                    DrawStartY = e.Y;
+                    Buffer = new Bitmap(pictureBox1.Image);
+                    break;
                 case Tools.Text:
                     IsDrawing = true;
                     DrawStartX = e.X;
@@ -285,12 +306,23 @@ namespace sobaco {
                     pictureBox1.Refresh();
                     IsDrawing = false;
                     break;
+                case Tools.Square:
+                    Gra.DrawImage(Buffer, 0, 0);
+                    Gra.DrawRectangle(DrawPen, DrawStartX, DrawStartY, Math.Abs(e.X - DrawStartX), Math.Abs(e.Y - DrawStartY));
+                    pictureBox1.Refresh();
+                    IsDrawing = false;
+                    break;
+                case Tools.SquareFill:
+                    Gra.DrawImage(Buffer, 0, 0);
+                    Gra.FillRectangle(DrawBrush, DrawStartX, DrawStartY, Math.Abs(e.X - DrawStartX), Math.Abs(e.Y - DrawStartY));
+                    pictureBox1.Refresh();
+                    IsDrawing = false;
+                    break;
                 case Tools.Text:
                     InputText _inputText = new InputText();
                     if (System.Windows.Forms.DialogResult.OK == _inputText.ShowDialog()) {
                         TextFont _textFont = _inputText.myTextFont;
-                        SolidBrush _brush = new SolidBrush(PenColor);
-                        Gra.DrawString(_textFont.Text, _textFont.Font, _brush, DrawStartX, DrawStartY);
+                        Gra.DrawString(_textFont.Text, _textFont.Font, DrawBrush, DrawStartX, DrawStartY);
                         pictureBox1.Refresh();
                     }
                     _inputText.Dispose();
@@ -350,6 +382,18 @@ namespace sobaco {
                         Gra.DrawEllipse(DrawPen, DrawStartX, DrawStartY, Math.Abs(e.X - DrawStartX), Math.Abs(e.Y - DrawStartY));
                         pictureBox1.Refresh();
                         break;
+                    case Tools.Square:
+                        if (!IsDrawing) return;
+                        Gra.DrawImage(Buffer, 0, 0);
+                        Gra.DrawRectangle(DrawPen, DrawStartX, DrawStartY, Math.Abs(e.X - DrawStartX), Math.Abs(e.Y - DrawStartY));
+                        pictureBox1.Refresh();
+                        break;
+                    case Tools.SquareFill:
+                        if (!IsDrawing) return;
+                        Gra.DrawImage(Buffer, 0, 0);
+                        Gra.FillRectangle(DrawBrush, DrawStartX, DrawStartY, Math.Abs(e.X - DrawStartX), Math.Abs(e.Y - DrawStartY));
+                        pictureBox1.Refresh();
+                        break;
                 }
             }
         }
@@ -404,6 +448,18 @@ namespace sobaco {
         private void BtnCircle_Click(object sender, EventArgs e) {
             ChangeButton(Tools.Circle);
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
+        }
+
+        private void bSquare_Click(object sender, EventArgs e) {
+            ChangeButton(Tools.Square);
+            this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
+
+        }
+
+        private void bSquareFill_Click(object sender, EventArgs e) {
+            ChangeButton(Tools.SquareFill);
+            this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
+
         }
 
         private Pen ErasePen = new Pen(Color.White, 20);
@@ -594,36 +650,42 @@ namespace sobaco {
         private void BtnBlack_Click(object sender, EventArgs e) {
             PenColor = Color.Black;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = SystemColors.Control;
         }
 
         private void BtnRed_Click(object sender, EventArgs e) {
             PenColor = Color.Red;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = Color.Red;
         }
 
         private void BtnGreen_Click(object sender, EventArgs e) {
             PenColor = Color.Green;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = Color.Green;
         }
 
         private void BtnBlue_Click(object sender, EventArgs e) {
             PenColor = Color.Blue;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = Color.Blue;
         }
 
         private void BtnWhite_Click(object sender, EventArgs e) {
             PenColor = Color.White;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = Color.White;
         }
 
         private void BtnYellow_Click(object sender, EventArgs e) {
             PenColor = Color.Yellow;
             DrawPen = new Pen(PenColor, LineWidth);
+            DrawBrush = new SolidBrush(PenColor);
             bColor.BackColor = Color.Yellow;
         }
 

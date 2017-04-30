@@ -156,7 +156,7 @@ namespace sobaco {
 
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            if (!OkiniiriEquals()) {
+            if (!OkiniiriEquals() && MyMeigaraList.FavoritetableCount > 0) {
                 DialogResult result = MessageBox.Show("お気に入りリストを保存しますか？",
                     "相場子",
                     MessageBoxButtons.YesNoCancel,
@@ -845,8 +845,8 @@ namespace sobaco {
 
             ChartPaint chartPaint = new ChartPaint(chartBitmap) {
                 StartPosition = FormStartPosition.Manual,
-                Left = this.Left,
-                Top = this.Top,
+                Left = 0,
+                Top = 0,
             };
 
             chartPaint.Show();

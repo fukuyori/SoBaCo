@@ -23,7 +23,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <ApplicationVersion>1.0.1.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -274,6 +274,8 @@
     <Content Include="b2c7fdb2ca771bd0c52437b288bad30c_xxo.ico" />
     <None Include="Resources\Save32.png" />
     <None Include="Resources\SaveAs32.png" />
+    <None Include="Resources\square.png" />
+    <None Include="Resources\squarefill.png" />
     <Content Include="sobaco.ico" />
   </ItemGroup>
   <ItemGroup>
