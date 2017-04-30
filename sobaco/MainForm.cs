@@ -453,7 +453,8 @@ namespace sobaco {
                 return;
             }
             // 履歴登録
-            MyMeigaraList.HistoryAdd(s);
+            if (MyMeigaraList.AddHistory(s))
+                dataGridView3.Rows[0].Selected = true;
             this.Cursor = _Cursor;
         }
 
@@ -496,7 +497,7 @@ namespace sobaco {
             switch (tabControl1.SelectedIndex) {
                 case 0:
                     if (tabControl1.SelectedIndex == 0) {
-                        if (dataGridView1.Rows.Count > 0 && dataGridView1.SelectedRows.Count == 0) {
+                        if (dataGridView1.Rows.Count > 0 && dataGridView1.SelectedRows.Count > 0) {
                             dataGridView1.Rows[0].Selected = true;
                             NewMeigaraMakeAndDraw(MyMeigaraList.GetSearchTableCode(dataGridView1.SelectedCells[0].RowIndex));
                         }
@@ -504,7 +505,7 @@ namespace sobaco {
                     break;
                 case 1:
                     if (tabControl1.SelectedIndex == 1) {
-                        if (dataGridView2.Rows.Count > 0 && dataGridView2.SelectedRows.Count == 0) {
+                        if (dataGridView2.Rows.Count > 0 && dataGridView2.SelectedRows.Count > 0) {
                             dataGridView2.Rows[0].Selected = true;
                             NewMeigaraMakeAndDraw(MyMeigaraList.GetFavoriteTableCode(dataGridView2.SelectedCells[0].RowIndex));
                         }
@@ -512,7 +513,7 @@ namespace sobaco {
                     break;
                 case 2:
                     if (tabControl1.SelectedIndex == 2) {
-                        if (dataGridView3.Rows.Count > 0 && dataGridView3.SelectedRows.Count == 0) {
+                        if (dataGridView3.Rows.Count > 0 && dataGridView3.SelectedRows.Count > 0) {
                             dataGridView3.Rows[0].Selected = true;
                             NewMeigaraMakeAndDraw(MyMeigaraList.GetHistoryTableCode(dataGridView3.SelectedCells[0].RowIndex));
                         }
@@ -1034,6 +1035,8 @@ namespace sobaco {
                 }
 
                 tabControl1.SelectedIndex = 1;
+                if (MyMeigaraList.FavoritetableCount > 0)
+                    NewMeigaraMakeAndDraw(MyMeigaraList.GetFavoriteTableCode(0));
             }
         }
 

@@ -171,7 +171,7 @@ namespace sobaco {
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public bool HistoryAdd(string s) {
+        public bool AddHistory(string s) {
 
             DataRow _historyRow, _foundRow;
 
