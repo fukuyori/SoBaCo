@@ -77,6 +77,9 @@ namespace sobaco {
             bUndo.Enabled = false;
             bRedo.Enabled = false;
 
+            // ショートカットキー
+            this.KeyPreview = true;
+
             // Graphics オブジェクトの取得
             pictureBox1.Image = new Bitmap(PictureWidth, PictureHeight);
             Gra = Graphics.FromImage(pictureBox1.Image);
@@ -707,10 +710,12 @@ namespace sobaco {
         private void ChartPaint_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.Z:
-                    Undo();
+                    if (e.Control == true)
+                        Undo();
                     break;
                 case Keys.Y:
-                    Redo();
+                    if (e.Control == true)
+                        Redo();
                     break;
             }
         }
