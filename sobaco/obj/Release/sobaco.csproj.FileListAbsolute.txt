@@ -1,0 +1,16 @@
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\bin\Release\sobaco.exe.config
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\bin\Release\sobaco.exe
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\bin\Release\sobaco.pdb
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\bin\Release\itextsharp.dll
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.csprojResolveAssemblyReference.cache
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\Interop.ActiveMarket.dll
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.csproj.ResolveComReference.cache
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.About.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.CalendarDialog.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.ChartPaint.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.MainForm.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.InputText.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.Properties.Resources.resources
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.csproj.GenerateResource.Cache
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.exe
+C:\Users\n_fuk\Dropbox\Evernote\source\SoBaCo\sobaco\obj\Release\sobaco.pdb

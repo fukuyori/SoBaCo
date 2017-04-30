@@ -453,13 +453,11 @@ namespace sobaco {
         private void bSquare_Click(object sender, EventArgs e) {
             ChangeButton(Tools.Square);
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
-
         }
 
         private void bSquareFill_Click(object sender, EventArgs e) {
             ChangeButton(Tools.SquareFill);
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
-
         }
 
         private Pen ErasePen = new Pen(Color.White, 20);
@@ -485,6 +483,12 @@ namespace sobaco {
                 case Tools.Circle:
                     bCircle.BackColor = SystemColors.Control;
                     break;
+                case Tools.Square:
+                    bSquare.BackColor = SystemColors.Control;
+                    break;
+                case Tools.SquareFill:
+                    bSquareFill.BackColor = SystemColors.Control;
+                    break;
                 case Tools.Eraser:
                     bEraser.BackColor = SystemColors.Control;
                     break;
@@ -506,6 +510,12 @@ namespace sobaco {
                     break;
                 case Tools.Circle:
                     bCircle.BackColor = SystemColors.Highlight;
+                    break;
+                case Tools.Square:
+                    bSquare.BackColor = SystemColors.Highlight;
+                    break;
+                case Tools.SquareFill:
+                    bSquareFill.BackColor = SystemColors.Highlight;
                     break;
                 case Tools.Eraser:
                     bEraser.BackColor = SystemColors.Highlight;
