@@ -219,7 +219,7 @@ namespace sobaco {
 
             // 銘柄名表示
             labelMeigara.Text = _meigara.Code + " " + _meigara.Name;
-            
+
             // ローソク足チャートの設定
             CandleSetting(_meigara, _chart);
 
@@ -246,9 +246,10 @@ namespace sobaco {
                     labelc.ForeColor = Color.Black;
                 else
                     labelc.ForeColor = Color.Red;
-                labelc.Text = string.Format("{0,5} {1,6}%",
+                labelc.Text = string.Format("{0,5} {1,6}% ({2,3})",
                     n.ToString("+#,0.##;-#,0.##"),
-                    (n / _meigara.GetPtClose(1) * 100).ToString("+#,0.##;-#,0.##"));
+                    (n / _meigara.GetPtClose(1) * 100).ToString("+#,0.##;-#,0.##"),
+                    RenzokuKaisuu(_meigara));
 
                 Hikaku(labelh1, _meigara.GetPtHeikin1(0), _meigara.GetPtHeikin1(1));
                 Hikaku(labelh2, _meigara.GetPtHeikin2(0), _meigara.GetPtHeikin2(1));
@@ -256,17 +257,76 @@ namespace sobaco {
                 Hikaku(labelh4, _meigara.GetPtHeikin4(0), _meigara.GetPtHeikin4(1));
                 if (MyMeigara.AveStep == AveSteps.Aiba)
                     Hikaku(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1));
+
+                // 上げから下げ、下げから上げに転じたら背景色を黄色に
+                if (_meigara.PtCount > 3) {
+                    Tenkan(labelc, _meigara.GetPtClose(0), _meigara.GetPtClose(1), _meigara.GetPtClose(2));
+                    Tenkan(labelh1, _meigara.GetPtHeikin1(0), _meigara.GetPtHeikin1(1), _meigara.GetPtHeikin1(2));
+                    Tenkan(labelh2, _meigara.GetPtHeikin2(0), _meigara.GetPtHeikin2(1), _meigara.GetPtHeikin2(2));
+                    Tenkan(labelh3, _meigara.GetPtHeikin3(0), _meigara.GetPtHeikin3(1), _meigara.GetPtHeikin3(2));
+                    Tenkan(labelh4, _meigara.GetPtHeikin4(0), _meigara.GetPtHeikin4(1), _meigara.GetPtHeikin4(2));
+                    if (MyMeigara.AveStep == AveSteps.Aiba)
+                        Tenkan(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1), _meigara.GetPtHeikin5(2));
+                }
+                // 移動平均線の順位入れ替わり
+                var d1 = Junni(_meigara, 0);
+                var d2 = Junni(_meigara, 1);
+                for (var i = 0; i < d1.Count(); i++) {
+                    Debug.WriteLine($"{d1[i]} {d2[i]}");
+                    if (d1[i] != d2[i])
+                        switch (d1[i]) {
+                            case "H1":
+                                labelh1.BackColor = Color.LightPink;
+                                break;
+                            case "H2":
+                                labelh2.BackColor = Color.LightPink;
+                                break;
+                            case "H3":
+                                labelh3.BackColor = Color.LightPink;
+                                break;
+                            case "H4":
+                                labelh4.BackColor = Color.LightPink;
+                                break;
+                            case "H5":
+                                labelh5.BackColor = Color.LightPink;
+                                break;
+                        }
+                }
             }
-            // 上げから下げ、下げから上げに転じたら背景色を黄色に
-            if (_meigara.PtCount > 3) {
-                Tenkan(labelc, _meigara.GetPtClose(0), _meigara.GetPtClose(1), _meigara.GetPtClose(2));
-                Tenkan(labelh1, _meigara.GetPtHeikin1(0), _meigara.GetPtHeikin1(1), _meigara.GetPtHeikin1(2));
-                Tenkan(labelh2, _meigara.GetPtHeikin2(0), _meigara.GetPtHeikin2(1), _meigara.GetPtHeikin2(2));
-                Tenkan(labelh3, _meigara.GetPtHeikin3(0), _meigara.GetPtHeikin3(1), _meigara.GetPtHeikin3(2));
-                Tenkan(labelh4, _meigara.GetPtHeikin4(0), _meigara.GetPtHeikin4(1), _meigara.GetPtHeikin4(2));
-                if (MyMeigara.AveStep == AveSteps.Aiba)
-                    Tenkan(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1), _meigara.GetPtHeikin5(2));
-            }
+        }
+
+        /// <summary>
+        /// 何日連続で上げあるいは下げが続いているか
+        /// </summary>
+        /// <param name="_meigara"></param>
+        /// <returns></returns>
+        private int RenzokuKaisuu(Meigara _meigara) {
+            bool isUp = (_meigara.GetPtClose(0) - _meigara.GetPtClose(1) >= 0) ? true : false;
+
+            var _count = 1;
+            var _close = _meigara.GetPtClose(1);
+            if (isUp)
+                while (_meigara.GetPtClose(_count) >= _meigara.GetPtClose(_count + 1)) {
+                    _count++;
+                }
+            else
+                while (_meigara.GetPtClose(_count) < _meigara.GetPtClose(_count + 1)) {
+                    _count++;
+                }
+            return _count;          
+        }
+
+        private List<string> Junni(Meigara _meigara, int pos) {
+            var _junni = new Dictionary<string, double> {
+                { "H1", _meigara.GetPtHeikin1(pos) },
+                { "H2", _meigara.GetPtHeikin2(pos) },
+                { "H3", _meigara.GetPtHeikin3(pos) },
+                { "H4", _meigara.GetPtHeikin4(pos) },
+                { "H5", _meigara.GetPtHeikin5(pos) }
+            };
+            return _junni.OrderByDescending(x => x.Value)
+                         .Select(x => x.Key)
+                         .ToList<string>();
         }
 
         /// <summary>
@@ -1209,19 +1269,31 @@ namespace sobaco {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void MoveTopToolStripMenuItem_Click(object sender, EventArgs e) {
-            int pos = dataGridView2.SelectedRows[0].Index;
+            var pos = dataGridView2.SelectedRows[0].Index;
             string code = MyMeigaraList.GetFavoriteTableCode(dataGridView2.SelectedRows[0].Index);
-
             MyMeigaraList.FavoriteSub(code);
             MyMeigaraList.FavoriteAdd(code, MeigaraList.Proc.INSERT);
-            dataGridView2.Rows[pos].Selected = true;
+            if ((MyMeigaraList.FavoritetableCount - 1) > pos)
+                dataGridView2.Rows[pos + 1].Selected = true;
+            else
+                dataGridView2.Rows[pos].Selected = true;
             bSave.Enabled = true;
         }
 
+        /// <summary>
+        /// お気に入りの削除
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e) {
-            string code = MyMeigaraList.GetFavoriteTableCode(dataGridView2.SelectedRows[0].Index);
-
+            var pos = dataGridView2.SelectedRows[0].Index;
+            string code = MyMeigaraList.GetFavoriteTableCode(pos);
             MyMeigaraList.FavoriteSub(code);
+            if (MyMeigaraList.FavoritetableCount > pos)
+                dataGridView2.Rows[pos].Selected = true;
+            else
+                dataGridView2.Rows[pos - 1].Selected = true;
+
             bSave.Enabled = true;
         }
 

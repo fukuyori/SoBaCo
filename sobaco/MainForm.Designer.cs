@@ -121,6 +121,7 @@
             this.labelh4 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
             this.labelh5 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.labelValue = new System.Windows.Forms.ToolStripLabel();
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
@@ -796,27 +797,27 @@
             this.deleteToolStripMenuItem,
             this.clearAllToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
             // 
             // moveTopToolStripMenuItem
             // 
             this.moveTopToolStripMenuItem.Name = "moveTopToolStripMenuItem";
-            this.moveTopToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.moveTopToolStripMenuItem.Text = "Move to Top";
+            this.moveTopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.moveTopToolStripMenuItem.Text = "一番上に移動";
             this.moveTopToolStripMenuItem.Click += new System.EventHandler(this.MoveTopToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.deleteToolStripMenuItem.Text = "Remove";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "削除";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
             // 
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.clearAllToolStripMenuItem.Text = "Clear All";
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearAllToolStripMenuItem.Text = "全て削除";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.ClearAllToolStripMenuItem_Click);
             // 
             // tabPage3
@@ -888,6 +889,7 @@
             this.labelh4,
             this.toolStripButton10,
             this.labelh5,
+            this.toolStripSeparator7,
             this.labelValue});
             this.toolStrip2.Location = new System.Drawing.Point(0, 49);
             this.toolStrip2.Name = "toolStrip2";
@@ -935,6 +937,7 @@
             this.labelDate.AutoSize = false;
             this.labelDate.BackColor = System.Drawing.SystemColors.Control;
             this.labelDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.labelDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDate.Name = "labelDate";
             this.labelDate.Size = new System.Drawing.Size(80, 22);
             this.labelDate.Text = "日付";
@@ -953,8 +956,9 @@
             // labelc
             // 
             this.labelc.AutoSize = false;
+            this.labelc.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelc.Name = "labelc";
-            this.labelc.Size = new System.Drawing.Size(80, 22);
+            this.labelc.Size = new System.Drawing.Size(140, 22);
             this.labelc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStripButton6
@@ -970,8 +974,9 @@
             // labelh1
             // 
             this.labelh1.AutoSize = false;
+            this.labelh1.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelh1.Name = "labelh1";
-            this.labelh1.Size = new System.Drawing.Size(40, 22);
+            this.labelh1.Size = new System.Drawing.Size(50, 22);
             this.labelh1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripButton7
@@ -987,8 +992,9 @@
             // labelh2
             // 
             this.labelh2.AutoSize = false;
+            this.labelh2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelh2.Name = "labelh2";
-            this.labelh2.Size = new System.Drawing.Size(40, 22);
+            this.labelh2.Size = new System.Drawing.Size(50, 22);
             this.labelh2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripButton8
@@ -1004,8 +1010,9 @@
             // labelh3
             // 
             this.labelh3.AutoSize = false;
+            this.labelh3.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelh3.Name = "labelh3";
-            this.labelh3.Size = new System.Drawing.Size(40, 22);
+            this.labelh3.Size = new System.Drawing.Size(50, 22);
             this.labelh3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripButton9
@@ -1021,8 +1028,9 @@
             // labelh4
             // 
             this.labelh4.AutoSize = false;
+            this.labelh4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelh4.Name = "labelh4";
-            this.labelh4.Size = new System.Drawing.Size(40, 22);
+            this.labelh4.Size = new System.Drawing.Size(50, 22);
             this.labelh4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripButton10
@@ -1038,16 +1046,22 @@
             // labelh5
             // 
             this.labelh5.AutoSize = false;
+            this.labelh5.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelh5.Name = "labelh5";
-            this.labelh5.Size = new System.Drawing.Size(40, 22);
+            this.labelh5.Size = new System.Drawing.Size(50, 22);
             this.labelh5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
             // 
             // labelValue
             // 
-            this.labelValue.Font = new System.Drawing.Font("Yu Gothic UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.labelValue.Font = new System.Drawing.Font("ＭＳ ゴシック", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.labelValue.Name = "labelValue";
             this.labelValue.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelValue.Size = new System.Drawing.Size(14, 22);
+            this.labelValue.Size = new System.Drawing.Size(17, 22);
             this.labelValue.Text = "ー";
             // 
             // printDialog1
@@ -1210,6 +1224,7 @@
         private System.Windows.Forms.ToolStripButton bSave;
         private System.Windows.Forms.ToolStripButton bSaveAs;
         private System.Windows.Forms.ToolStripMenuItem 銘柄ファイルを保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }
 
