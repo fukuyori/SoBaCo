@@ -764,6 +764,12 @@ namespace sobaco {
             if (MyMeigara == null)
                 return;
 
+            iTextSharp.text.FontFactory.RegisterDirectories();
+            iTextSharp.text.Font font = iTextSharp.text.FontFactory.GetFont("MS-Mincho", iTextSharp.text.pdf.BaseFont.IDENTITY_H,
+                  iTextSharp.text.pdf.BaseFont.NOT_EMBEDDED, 10);
+            iTextSharp.text.Font fontGothic = iTextSharp.text.FontFactory.GetFont("MS-Gothic", iTextSharp.text.pdf.BaseFont.IDENTITY_H,
+                  iTextSharp.text.pdf.BaseFont.NOT_EMBEDDED, 10);
+
             iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4.Rotate(), 8, 8, 40, 20);
             //ファイルの出力先を設定
             saveFileDialog1.Filter = "ＰＤＦファイル(*.pdf)|*.pdf";
@@ -776,19 +782,10 @@ namespace sobaco {
                 System.Windows.Forms.Cursor _Cursor = this.Cursor;
                 this.Cursor = Cursors.WaitCursor;
 
-
-
                 if (tabControl1.SelectedIndex == 1) {
-                    //しおり
-                    Dictionary<string, object> bookmark;
-                    List<Dictionary<string, object>> outlines;
-                    List<Dictionary<string, object>> root = new List<Dictionary<string, object>>();
 
-                    var tempFile = Path.GetTempFileName();
-
-                    using (FileStream fs = new FileStream(tempFile, FileMode.Create)) {
-                        iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, fs);
-
+                    using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create)) {
+                        iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, fs);
 
                         pdfDoc.Open();
                         var cnt = 1;
@@ -797,29 +794,22 @@ namespace sobaco {
                                 pdfDoc.NewPage();
                             pdfDoc.Add(MakePdfPage(_code));
 
-                            outlines = new List<Dictionary<string, object>>();
-                            bookmark = new Dictionary<string, object>();
-                            bookmark.Add("Title", $"{_code} {MyMeigaraList.GetNameByCode(_code)}");
-                            bookmark.Add("Page", $"{cnt.ToString()} FitH");
-                            bookmark.Add("Action", "GoTo");
-                            root.Add(bookmark);
                             cnt++;
                         }
+
+                        // しおり作成
+                        iTextSharp.text.pdf.PdfAction pdfaction;
+                        iTextSharp.text.pdf.PdfContentByte contentByte = writer.DirectContent;
+                        cnt = 1;
+                        foreach (string s in MyMeigaraList.FavoriteCodes) {
+                            iTextSharp.text.Paragraph p = new iTextSharp.text.Paragraph($"{s} {MyMeigaraList.GetNameByCode(s)}", fontGothic);
+                            pdfaction = iTextSharp.text.pdf.PdfAction.GotoLocalPage(cnt, new iTextSharp.text.pdf.PdfDestination(iTextSharp.text.pdf.PdfDestination.XYZ, -1, 10000, 0), writer);
+                            iTextSharp.text.pdf.PdfOutline outRoot = new iTextSharp.text.pdf.PdfOutline(contentByte.RootOutline, pdfaction, p, true);
+                            cnt++;
+                        }
+
                         pdfDoc.Close();
                     }
-                    // しおり作成
-                    using (iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(tempFile)) {
-                        using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create)) {
-                            iTextSharp.text.Document pdfCopyDoc = new iTextSharp.text.Document();
-                            iTextSharp.text.pdf.PdfCopy copy = new iTextSharp.text.pdf.PdfCopy(pdfCopyDoc, fs);
-                            pdfCopyDoc.Open();
-                            copy.AddDocument(reader);
-                            copy.Outlines = root;
-                            copy.Close();
-                            pdfCopyDoc.Close();
-                        }
-                    }
-                    System.IO.File.Delete(tempFile);
 
                 } else {
                     using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create)) {
