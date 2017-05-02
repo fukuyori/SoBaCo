@@ -151,7 +151,17 @@ namespace sobaco {
             this.dataGridView3.SelectionChanged += new System.EventHandler(this.DataGridView3_SelectionChanged);
 
             tabControl1.SelectedIndex = Tab;
-            toolStripTextBox1.Focus();
+            switch (Tab) {
+                case 0:
+                    dataGridView1.Focus();
+                    break;
+                case 1:
+                    dataGridView2.Focus();
+                    break;
+                case 2:
+                    dataGridView3.Focus();
+                    break;
+            }
         }
 
 
@@ -272,7 +282,6 @@ namespace sobaco {
                 var d1 = Junni(_meigara, 0);
                 var d2 = Junni(_meigara, 1);
                 for (var i = 0; i < d1.Count(); i++) {
-                    Debug.WriteLine($"{d1[i]} {d2[i]}");
                     if (d1[i] != d2[i])
                         switch (d1[i]) {
                             case "H1":
@@ -497,6 +506,8 @@ namespace sobaco {
             System.Windows.Forms.Cursor _Cursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
+            var oldMeigara = MyMeigara;
+
             try {
                 MyMeigara = new Meigara(s);
 
@@ -508,6 +519,8 @@ namespace sobaco {
                 // 描画
                 DrawTable(MyMeigara, chart1);
             } catch {
+                MyMeigara.Dispose();
+                MyMeigara = oldMeigara;
                 Debug.WriteLine("MakeTableAndDraw Error : " + s);
                 this.Cursor = _Cursor;
                 return;
@@ -516,6 +529,17 @@ namespace sobaco {
             if (MyMeigaraList.AddHistory(s))
                 dataGridView3.Rows[0].Selected = true;
             this.Cursor = _Cursor;
+            switch (tabControl1.SelectedIndex) {
+                case 0:
+                    dataGridView1.Focus();
+                    break;
+                case 1:
+                    dataGridView2.Focus();
+                    break;
+                case 2:
+                    dataGridView3.Focus();
+                    break;
+            }
         }
 
         /// <summary>
@@ -930,8 +954,8 @@ namespace sobaco {
                     if (MyMeigara != null) {
                         System.Windows.Forms.Cursor _Cursor = this.Cursor;
                         this.Cursor = Cursors.WaitCursor;
-                        MyMeigara.ShiftKabukaTable(-1);
-                        DrawTable(MyMeigara, chart1);
+                        if (MyMeigara.ShiftKabukaTable(-1))
+                            DrawTable(MyMeigara, chart1);
                         this.Cursor = _Cursor;
                     }
                     break;
@@ -939,8 +963,8 @@ namespace sobaco {
                     if (MyMeigara != null) {
                         System.Windows.Forms.Cursor _Cursor = this.Cursor;
                         this.Cursor = Cursors.WaitCursor;
-                        MyMeigara.ShiftKabukaTable(1);
-                        DrawTable(MyMeigara, chart1);
+                        if (MyMeigara.ShiftKabukaTable(1))
+                            DrawTable(MyMeigara, chart1);
                         this.Cursor = _Cursor;
                     }
                     break;
@@ -996,7 +1020,7 @@ namespace sobaco {
                     }
                     break;
                 case Keys.H:
-                    if (e.Control == true) 
+                    if (e.Control == true)
                         toolStripTextBox1.Focus();
                     break;
                 case Keys.O:
@@ -1012,7 +1036,7 @@ namespace sobaco {
                         OkiniiriSaveAs();
                     break;
                 case Keys.E:
-                    if (e.Control == true) 
+                    if (e.Control == true)
                         ExportToPDF();
                     break;
                 case Keys.P:
@@ -1026,6 +1050,19 @@ namespace sobaco {
                 case Keys.X:
                     if (e.Control == true)
                         this.Close();
+                    break;
+                case Keys.Enter:
+                    switch (tabControl1.SelectedIndex) {
+                        case 0:
+                            dataGridView1.Focus();
+                            break;
+                        case 1:
+                            dataGridView2.Focus();
+                            break;
+                        case 2:
+                            dataGridView3.Focus();
+                            break;
+                    }
                     break;
             }
         }
@@ -1307,11 +1344,11 @@ namespace sobaco {
             if (MyMeigara != null) {
                 if ((e.Delta * SystemInformation.MouseWheelScrollLines / 120) < 0) {
 
-                    MyMeigara.ShiftKabukaTable(1);
-                    DrawTable(MyMeigara, chart1);
+                    if (MyMeigara.ShiftKabukaTable(1))
+                        DrawTable(MyMeigara, chart1);
                 } else if ((e.Delta * SystemInformation.MouseWheelScrollLines / 120) > 0) {
-                    MyMeigara.ShiftKabukaTable(-1);
-                    DrawTable(MyMeigara, chart1);
+                    if (MyMeigara.ShiftKabukaTable(-1))
+                        DrawTable(MyMeigara, chart1);
                 }
 
             }
@@ -1364,8 +1401,8 @@ namespace sobaco {
 
         private bool DragMoveForward(System.Windows.Forms.MouseEventArgs e, int mouseMove, int chartMove) {
             if (IsMouseDown && Math.Abs(e.X - MousePoint.X) > mouseMove) {
-                MyMeigara.ShiftKabukaTable(chartMove);
-                DrawTable(MyMeigara, chart1);
+                if (MyMeigara.ShiftKabukaTable(chartMove))
+                    DrawTable(MyMeigara, chart1);
                 MousePoint = new Point(e.X, e.Y);
                 return true;
             }
@@ -1374,8 +1411,8 @@ namespace sobaco {
 
         private bool DragMoveRewind(System.Windows.Forms.MouseEventArgs e, int mouseMove, int chartMove) {
             if (IsMouseDown && Math.Abs(e.X - MousePoint.X) > mouseMove) {
-                MyMeigara.ShiftKabukaTable(-1 * chartMove);
-                DrawTable(MyMeigara, chart1);
+                if (MyMeigara.ShiftKabukaTable(-1 * chartMove))
+                    DrawTable(MyMeigara, chart1);
                 MousePoint = new Point(e.X, e.Y);
                 return true;
             }

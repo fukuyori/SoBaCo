@@ -175,6 +175,9 @@ namespace sobaco {
             else
                 dt.Rows.Add(row);
 
+            // お気に入りに変更有
+            bSave.Enabled = true;
+
             return dt.Rows.IndexOf(row);
         }
     }

@@ -134,7 +134,7 @@ namespace sobaco {
         public DateTime PlotStartDate {
             get {
                 ActiveMarket.Calendar calendar = new ActiveMarket.Calendar();
-                return calendar.Date(PlotStart.Value);
+                return calendar.Date(PlotStart ?? PlotEnd);
             }
         }
         // 株価テーブル終了位置
@@ -268,7 +268,7 @@ namespace sobaco {
         /// 株価テーブルを過去、未来へずらす
         /// </summary>
         /// <param name="shift"></param>
-        public void ShiftKabukaTable(int shift) {
+        public bool ShiftKabukaTable(int shift) {
             var calendar = new ActiveMarket.Calendar();
             KabukaRow _kabukaRow = new KabukaRow();
             int? _datepos;
@@ -277,7 +277,7 @@ namespace sobaco {
                 // 過去日付へ１つずらす
                 _datepos = NextDatePosition(this.PlotStart.Value, Directions.Befor);
                 if (!_datepos.HasValue)
-                    return;
+                    return false;
 
                 var cnt = 0;
                 while (cnt < Math.Abs(shift)) {
@@ -312,13 +312,13 @@ namespace sobaco {
                     }
                     _datepos = NextDatePosition(_datepos.Value, Directions.Befor);
                     if (!_datepos.HasValue)
-                        return;
+                        return true;
                 }
             } else {
                 // 未来日付に１つずらす
                 _datepos = NextDatePosition(this.PlotEnd, Directions.After);
                 if (!_datepos.HasValue)
-                    return;
+                    return false;
 
                 var cnt = 0;
                 while (cnt < Math.Abs(shift)) {
@@ -351,9 +351,10 @@ namespace sobaco {
                     }
                     _datepos = NextDatePosition(_datepos.Value, Directions.After);
                     if (!_datepos.HasValue)
-                        return;
+                        return true;
                 }
             }
+            return true;
         }
 
         /// <summary>
