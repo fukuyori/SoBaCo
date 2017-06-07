@@ -13,13 +13,18 @@ using System.Diagnostics;
 
 namespace sobaco {
     public partial class MainForm : Form {
-
         /// <summary>
         /// 移動平均線を５、２０、６０、１００、３００に変更
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void AibaToolStripMenuItem_CheckedChanged(object sender, EventArgs e) {
+            AveStepChangeOnClick(AveSteps.Aiba);
+            if (MyMeigara != null)
+                NewMeigaraMakeAndDraw(MyMeigara.Code);
+        }
+
+        private void AibaToolStripMenuItem_Click(object sender, EventArgs e) {
             AveStepChangeOnClick(AveSteps.Aiba);
             if (MyMeigara != null)
                 NewMeigaraMakeAndDraw(MyMeigara.Code);
@@ -42,8 +47,14 @@ namespace sobaco {
                 NewMeigaraMakeAndDraw(MyMeigara.Code);
         }
 
-        private void AibaToolStripMenuItem_Click(object sender, EventArgs e) {
-            AveStepChangeOnClick(AveSteps.Aiba);
+        private void UserSettingMenuItem_Click(object sender, EventArgs e) {
+            AveStepChangeOnClick(AveSteps.User);
+            if (MyMeigara != null)
+                NewMeigaraMakeAndDraw(MyMeigara.Code);
+        }
+
+        private void UserSettingToolStripMenuItem_Click(object sender, EventArgs e) {
+            AveStepChangeOnClick(AveSteps.User);
             if (MyMeigara != null)
                 NewMeigaraMakeAndDraw(MyMeigara.Code);
         }
@@ -52,24 +63,41 @@ namespace sobaco {
             this.NormalToolStripMenuItem.CheckedChanged -= new System.EventHandler(this.NormalToolStripMenuItem_CheckedChanged);
             this.AibaToolStripMenuItem.CheckedChanged -= new System.EventHandler(this.AibaToolStripMenuItem_CheckedChanged);
 
-            AveStep = aveStep;
+            MyConfig.AveStep = aveStep;
 
             switch (aveStep) {
                 case AveSteps.Normal:
                     NormalToolStripMenuItem.Checked = true;
                     AibaToolStripMenuItem.Checked = false;
+                    userSettingToolStripMenuItem.Checked = false;
                     NormalToolStripMenuItem.CheckOnClick = false;
                     AibaToolStripMenuItem.CheckOnClick = true;
+                    userSettingToolStripMenuItem.CheckOnClick = true;
                     標準ToolStripMenuItem.Checked = true;
                     相場師朗式ToolStripMenuItem.Checked = false;
+                    userSettingMenuItem1.Checked = false;
                     break;
                 case AveSteps.Aiba:
                     AibaToolStripMenuItem.Checked = true;
                     NormalToolStripMenuItem.Checked = false;
+                    userSettingToolStripMenuItem.Checked = false;
                     AibaToolStripMenuItem.CheckOnClick = false;
                     NormalToolStripMenuItem.CheckOnClick = true;
+                    userSettingMenuItem1.CheckOnClick = true;
                     標準ToolStripMenuItem.Checked = false;
                     相場師朗式ToolStripMenuItem.Checked = true;
+                    userSettingMenuItem1.Checked = false;
+                    break;
+                case AveSteps.User:
+                    AibaToolStripMenuItem.Checked = false;
+                    NormalToolStripMenuItem.Checked = false;
+                    userSettingToolStripMenuItem.Checked = true;
+                    AibaToolStripMenuItem.CheckOnClick = true;
+                    NormalToolStripMenuItem.CheckOnClick = true;
+                    userSettingMenuItem1.CheckOnClick = false;
+                    標準ToolStripMenuItem.Checked = false;
+                    相場師朗式ToolStripMenuItem.Checked = false;
+                    userSettingMenuItem1.Checked = true;
                     break;
             }
 
@@ -87,12 +115,12 @@ namespace sobaco {
             if (MyMeigara != null) {
                 System.Windows.Forms.Cursor _Cursor = this.Cursor;
                 this.Cursor = Cursors.WaitCursor;
-                MyMeigara.ShiftKabukaTable(-1 * CandleSizeList[(int)CandleSize].Days);
+                MyMeigara.ShiftKabukaTable(-1 * CandleSizeList[(int)MyConfig.CandleSize].Days);
                 DrawTable(MyMeigara, chart1);
                 this.Cursor = _Cursor;
             }
         }
-
+        
         /// <summary>
         /// １日前に移動
         /// </summary>
@@ -132,7 +160,7 @@ namespace sobaco {
             if (MyMeigara != null) {
                 System.Windows.Forms.Cursor _Cursor = this.Cursor;
                 this.Cursor = Cursors.WaitCursor;
-                MyMeigara.ShiftKabukaTable(CandleSizeList[(int)CandleSize].Days);
+                MyMeigara.ShiftKabukaTable(CandleSizeList[(int)MyConfig.CandleSize].Days);
                 DrawTable(MyMeigara, chart1);
                 this.Cursor = _Cursor;
             }
@@ -199,27 +227,27 @@ namespace sobaco {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ToolStripButton6_Click(object sender, EventArgs e) {
-            IdouheikinLine1 = CycleSw(IdouheikinLine1, 3);
+            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton7_Click(object sender, EventArgs e) {
-            IdouheikinLine2 = CycleSw(IdouheikinLine2, 3);
+            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton8_Click(object sender, EventArgs e) {
-            IdouheikinLine3 = CycleSw(IdouheikinLine3, 3);
+            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton9_Click(object sender, EventArgs e) {
-            IdouheikinLine4 = CycleSw(IdouheikinLine4, 3);
+            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton10_Click(object sender, EventArgs e) {
-            IdouheikinLine5 = CycleSw(IdouheikinLine5, 3);
+            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
             DrawTable(MyMeigara, chart1);
         }
 
@@ -237,7 +265,7 @@ namespace sobaco {
         }
 
         private void ToolStripButton11_Click(object sender, EventArgs e) {
-            ChartStyle = (ChartStyles)CycleSw((int)ChartStyle, 3);
+            MyConfig.ChartStyle = (ChartStyles)CycleSw((int)MyConfig.ChartStyle, 3);
             DrawTable(MyMeigara, chart1);
         }
 
@@ -297,7 +325,7 @@ namespace sobaco {
                     最小ToolStripMenuItem.Checked = true;
                     break;
             }
-            CandleSize = size;
+            MyConfig.CandleSize = size;
 
             this.XLToolStripMenuItem.CheckedChanged += new System.EventHandler(this.XLToolStripMenuItem_CheckedChanged);
             this.LToolStripMenuItem.CheckedChanged += new System.EventHandler(this.LToolStripMenuItem_CheckedChanged);
@@ -306,19 +334,19 @@ namespace sobaco {
             this.XSToolStripMenuItem.CheckedChanged += new System.EventHandler(this.XSToolStripMenuItem_CheckedChanged);
         }
 
+
         /// <summary>
         /// 表示幅の変更
         /// </summary>
-        /// <param name="candleSize"></param>
         private void SizeChange() {
             if (MyMeigara != null) {
                 System.Windows.Forms.Cursor _Cursor = this.Cursor;
                 this.Cursor = Cursors.WaitCursor;
                 // テーブル作成
                 MyMeigara.MakeTable(MyMeigara.PlotEnd,
-                            CandleSizeList[(int)CandleSize].Days,
-                            ChartScale,
-                            AveStep);
+                            CandleSizeList[(int)MyConfig.CandleSize].Days,
+                            MyConfig.ChartScale,
+                            MyConfig.AveStep);
                 // 描画
                 DrawTable(MyMeigara, chart1);
                 this.Cursor = _Cursor;
@@ -381,8 +409,8 @@ namespace sobaco {
             if (MyMeigara != null) {
                 MyMeigara.MakeTable(MyMeigara.PlotEnd,
                             MyMeigara.PlotWide.Value,
-                            ChartScale,
-                            AveStep);
+                            MyConfig.ChartScale,
+                            MyConfig.AveStep);
                 DrawTable(MyMeigara, chart1);
             }
         }
@@ -391,8 +419,8 @@ namespace sobaco {
             if (MyMeigara != null) {
                 MyMeigara.MakeTable(plotEnd,
                             MyMeigara.PlotWide.Value,
-                            ChartScale,
-                            AveStep);
+                            MyConfig.ChartScale,
+                            MyConfig.AveStep);
                 DrawTable(MyMeigara, chart1);
             }
         }
@@ -412,7 +440,7 @@ namespace sobaco {
             週足ToolStripMenuItem.Checked = false;
             月足ToolStripMenuItem.Checked = false;
 
-            ChartScale = chartScale;
+            MyConfig.ChartScale = chartScale;
 
             switch (chartScale) {
                 case ChartScales.Daily:
@@ -471,17 +499,17 @@ namespace sobaco {
             }
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e) {
             About _about = new About();
             _about.ShowDialog();
             _about.Dispose();
         }
 
-        private void bSave_Click(object sender, EventArgs e) {
+        private void BSave_Click(object sender, EventArgs e) {
             OkiniiriSave();
         }
 
-        private void bSaveAs_Click(object sender, EventArgs e) {
+        private void BSaveAs_Click(object sender, EventArgs e) {
             OkiniiriSaveAs();
         }
     }

@@ -9,14 +9,10 @@ using System.Diagnostics;
 using Microsoft.Win32.SafeHandles;
 
 namespace sobaco {
-    // 移動平均の刻み
-    enum AveSteps { Normal = 0, Aiba };
-    // 日足、週足、月足
-    enum ChartScales { Daily, Weekly, Monthly };
     // 日付取得の方向
     enum Directions { Befor, After };
 
-    class Meigara : IDisposable {
+    public class Meigara : IDisposable {
 
         private class KabukaRow {
             public int StartPos { get; set; }
@@ -53,46 +49,7 @@ namespace sobaco {
         // 移動平均線の刻み値
         public AveSteps AveStep { get; private set; }
 
-        private class IdouHeikin {
-            private int[] Daily { get; set; }
-            private int[] Weekly { get; set; }
-            private int[] Monthly { get; set; }
-
-            public IdouHeikin(int[] _Daily, int[] _Weekly, int[] _Monthly) {
-                this.Daily = _Daily;
-                this.Weekly = _Weekly;
-                this.Monthly = _Monthly;
-            }
-            public int[] GetIdouHeikin(ChartScales _ChartScale) {
-                switch (_ChartScale) {
-                    case ChartScales.Weekly:
-                        return this.Weekly;
-                    case ChartScales.Monthly:
-                        return this.Monthly;
-                    default:
-                        return this.Daily;
-                }
-            }
-        }
-        private IdouHeikin[] IdouHeikinScales = new IdouHeikin[2] {
-            new IdouHeikin(
-                    new int[] { 5, 25, 75, 200, 0 },
-                    new int[] { 9, 13, 26, 50, 0 },
-                    new int[] { 6, 12, 24, 60, 0 }),
-            new IdouHeikin(
-                    new int[] { 5, 20, 60, 100, 300 },
-                    new int[] { 5, 20, 60, 100, 300 },
-                    new int[] { 5, 20, 60, 100, 300 })
-        };
-        private int GetIdouHeikinPoint(int n) {
-            switch (AveStep) {
-                case AveSteps.Normal:
-                    return IdouHeikinScales[0].GetIdouHeikin(ChartScale)[n];
-                default: // AveSteps.Aiba:
-                    return IdouHeikinScales[1].GetIdouHeikin(ChartScale)[n];
-            }
-        }
-
+        private List<List<List<int>>> IdouheikinScales;
         private ActiveMarket.Prices Price;
         private bool IsDisposed = false;
         SafeFileHandle handle = new SafeFileHandle(IntPtr.Zero, true); // dispose
@@ -117,6 +74,26 @@ namespace sobaco {
         public void SetPtHeikin3(int pos, double value) { PriceTable.Rows[pos]["Heikin3"] = value; }
         public void SetPtHeikin4(int pos, double value) { PriceTable.Rows[pos]["Heikin4"] = value; }
         public void SetPtHeikin5(int pos, double value) { PriceTable.Rows[pos]["Heikin5"] = value; }
+        public void SetPtHeikin(int n, int pos, double value) {
+            switch (n) {
+                case 1:
+                    SetPtHeikin1(pos, value);
+                    break;
+                case 2:
+                    SetPtHeikin2(pos, value);
+                    break;
+                case 3:
+                    SetPtHeikin3(pos, value);
+                    break;
+                case 4:
+                    SetPtHeikin4(pos, value);
+                    break;
+                case 5:
+                    SetPtHeikin5(pos, value);
+                    break;
+            }
+        }
+
 
         public int PtCount {
             get { return PriceTable.Rows.Count; }
@@ -222,16 +199,15 @@ namespace sobaco {
         /// 銘柄オブジェクトの作成
         /// </summary>
         /// <param name="code"></param>
-        public Meigara(string code) {
+        public Meigara(string code, List<List<List<int>>> idouheikin) {
             this.Price = new ActiveMarket.Prices();
             this.Code = code;
             this.Price.AdjustExRights = 1; // 権利落ち修正した値段を読み込みます
             Price.Read(code);
             this.Name = Price.Name();
 
-            // 初期値設定
-            this.ChartScale = ChartScales.Daily;
-            this.AveStep = AveSteps.Aiba;
+            IdouheikinScales = idouheikin;
+
 
             // 株価テーブル設定
             PriceTable = new DataTable();
@@ -306,8 +282,10 @@ namespace sobaco {
                                                 ((Owarine)OwarineList[OwarineList.Count - 1]).DatePos, Directions.Befor);
                         if (_OwarineDatePos.HasValue) 
                             OwarineList.Add(new Owarine(_OwarineDatePos.Value, Price.Close(_OwarineDatePos.Value)));
-                        SetHeikin(PtCount - 1);
-                        
+                        for (var j = 0; j < 5; j++) {
+                            SetHeikin(PtCount - 1, j);
+                        }
+
                         cnt++;
                     }
                     _datepos = NextDatePosition(_datepos.Value, Directions.Befor);
@@ -345,7 +323,10 @@ namespace sobaco {
                         OwarineList.RemoveAt(OwarineList.Count - 1);
                         OwarineList.Insert(0, new Owarine(_kabukaRow.EndPos, _kabukaRow.Close));
 
-                        SetHeikin(0);
+                        for (var j = 0; j < 5; j++) {
+                            SetHeikin(0, j);
+                        }
+
 
                         cnt++;
                     }
@@ -417,6 +398,7 @@ namespace sobaco {
             _endPos = calendar.DatePosition(_endDate, -1);
 
             _kabukaRow.EndPos = 0;
+
             for (var i = _startPos; i <= _endPos; i++) {
                 if (Price.IsClosed(i) == 0) {
                     if (_kabukaRow.EndPos == 0) {
@@ -433,6 +415,7 @@ namespace sobaco {
                     }
                 }
             }
+
             if (_kabukaRow.EndPos == 0)
                 // 一日も開場日がなかった場合,nullが返される
                 return null;
@@ -616,57 +599,41 @@ namespace sobaco {
                     break;
                 OwarineList.Add(new Owarine(_datePos.Value, Price.Close(_datePos.Value)));
             }
-
             for (var i = 0; i < PtCount; i++) {
-                SetHeikin(i);
+                for (var j = 0; j < 5; j++) {
+                    SetHeikin(i, j);
+                }
             }
         }
 
+
+        public int GetIdouheikinPoint(AveSteps _aveStep, ChartScales _chartScale, int n) {
+            List<List<int>> Idouheikins;
+
+            Idouheikins = IdouheikinScales[(int)_aveStep];
+
+            return Idouheikins[(int)_chartScale][n];
+        }
+
         /// <summary>
-        /// 移動平均値の計算
+        /// 移動平均線計算
         /// </summary>
-        /// <param name="i"></param>
-        private void SetHeikin(int i) {
-            if (OwarineList.Where((x, index) => (i + GetIdouHeikinPoint(0)) > index & index >= i).Count() == GetIdouHeikinPoint(0))
-                SetPtHeikin1(i, OwarineList
+        /// <param name="i">DatePos</param>
+        /// <param name="n">移動平均線１～５</param>
+        private void SetHeikin(int i, int n) {
+            if (GetIdouheikinPoint(AveStep, ChartScale, n) == 0)
+                return;
+
+            if (OwarineList
+                .Where((x, index) => (i + GetIdouheikinPoint(AveStep, ChartScale, n)) > index & index >= i)
+                .Count()
+                == GetIdouheikinPoint(AveStep, ChartScale, n))
+                SetPtHeikin(n + 1, i, OwarineList
                     .Select(x => x.Value)
-                    .Where((x, index) => (i + GetIdouHeikinPoint(0)) > index & index >= i)
+                    .Where((x, index) => (i + GetIdouheikinPoint(AveStep, ChartScale, n)) > index & index >= i)
                     .Average());
             else
-                SetPtHeikin1(i, 0);
-
-            if (OwarineList.Where((x, index) => (i + GetIdouHeikinPoint(1)) > index & index >= i).Count() == GetIdouHeikinPoint(1))
-                SetPtHeikin2(i, OwarineList
-                            .Select(x => x.Value)
-                            .Where((x, index) => (i + GetIdouHeikinPoint(1)) > index & index >= i)
-                            .Average());
-            else
-                SetPtHeikin2(i, 0);
-
-            if (OwarineList.Where((x, index) => (i + GetIdouHeikinPoint(2)) > index & index >= i).Count() == GetIdouHeikinPoint(2))
-                SetPtHeikin3(i, OwarineList
-                            .Select(x => x.Value)
-                            .Where((x, index) => (i + GetIdouHeikinPoint(2)) > index & index >= i)
-                            .Average());
-            else
-                SetPtHeikin3(i, 0);
-
-            if (OwarineList.Where((x, index) => (i + GetIdouHeikinPoint(3)) > index & index >= i).Count() == GetIdouHeikinPoint(3))
-                SetPtHeikin4(i, OwarineList
-                            .Select(x => x.Value)
-                            .Where((x, index) => (i + GetIdouHeikinPoint(3)) > index & index >= i)
-                            .Average());
-            else
-                SetPtHeikin4(i, 0);
-
-            if (GetIdouHeikinPoint(4) > 0)
-                if (OwarineList.Where((x, index) => (i + GetIdouHeikinPoint(4)) > index & index >= i).Count() == GetIdouHeikinPoint(4))
-                    SetPtHeikin5(i, OwarineList
-                            .Select(x => x.Value)
-                            .Where((x, index) => (i + GetIdouHeikinPoint(4)) > index & index >= i)
-                            .Average());
-                else
-                    SetPtHeikin5(i, 0);
+                SetPtHeikin(n + 1, i, 0);
         }
     }
 }

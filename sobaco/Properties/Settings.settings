@@ -44,11 +44,97 @@
     <Setting Name="Tab" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Favorite" Type="System.String" Scope="User">
+    <Setting Name="Favorites" Type="System.String" Scope="User">
       <Value Profile="(Default)">1001</Value>
     </Setting>
-    <Setting Name="MeigaraFileName" Type="System.String" Scope="User">
+    <Setting Name="OkiniiriFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Idouheikin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfArrayOfArrayOfInt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ArrayOfArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;5&lt;/int&gt;
+      &lt;int&gt;25&lt;/int&gt;
+      &lt;int&gt;75&lt;/int&gt;
+      &lt;int&gt;200&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;9&lt;/int&gt;
+      &lt;int&gt;13&lt;/int&gt;
+      &lt;int&gt;26&lt;/int&gt;
+      &lt;int&gt;50&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;6&lt;/int&gt;
+      &lt;int&gt;12&lt;/int&gt;
+      &lt;int&gt;24&lt;/int&gt;
+      &lt;int&gt;60&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+  &lt;/ArrayOfArrayOfInt&gt;
+  &lt;ArrayOfArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;5&lt;/int&gt;
+      &lt;int&gt;20&lt;/int&gt;
+      &lt;int&gt;60&lt;/int&gt;
+      &lt;int&gt;100&lt;/int&gt;
+      &lt;int&gt;300&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;5&lt;/int&gt;
+      &lt;int&gt;20&lt;/int&gt;
+      &lt;int&gt;60&lt;/int&gt;
+      &lt;int&gt;100&lt;/int&gt;
+      &lt;int&gt;300&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;5&lt;/int&gt;
+      &lt;int&gt;20&lt;/int&gt;
+      &lt;int&gt;60&lt;/int&gt;
+      &lt;int&gt;100&lt;/int&gt;
+      &lt;int&gt;300&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+  &lt;/ArrayOfArrayOfInt&gt;
+  &lt;ArrayOfArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;7&lt;/int&gt;
+      &lt;int&gt;14&lt;/int&gt;
+      &lt;int&gt;42&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;7&lt;/int&gt;
+      &lt;int&gt;14&lt;/int&gt;
+      &lt;int&gt;42&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+    &lt;ArrayOfInt&gt;
+      &lt;int&gt;7&lt;/int&gt;
+      &lt;int&gt;14&lt;/int&gt;
+      &lt;int&gt;42&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+      &lt;int&gt;0&lt;/int&gt;
+    &lt;/ArrayOfInt&gt;
+  &lt;/ArrayOfArrayOfInt&gt;
+&lt;/ArrayOfArrayOfArrayOfInt&gt;</Value>
+    </Setting>
+    <Setting Name="Hanbun1" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">70</Value>
+    </Setting>
+    <Setting Name="Hanbun2" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="Hanbun3" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">95</Value>
+    </Setting>
+    <Setting Name="Hanbun4" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">30</Value>
     </Setting>
   </Settings>
 </SettingsFile>

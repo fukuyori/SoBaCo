@@ -12,49 +12,47 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
 using System.Configuration;
 using System.Collections.Specialized;
-using iTextSharp;
+using iText = iTextSharp.text;
+using iTextPdf = iTextSharp.text.pdf;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace sobaco {
-
     public enum ChartStyles { None = 0, Candle, Line };
     public enum CandleSizes { XL = 0, L, M, S, XS };
-
+    // 移動平均の刻み
+    public enum AveSteps { Normal = 0, Aiba, User };
+    // 日足、週足、月足
+    public enum ChartScales { Daily, Weekly, Monthly };
 
     public partial class MainForm : Form {
 
 
         Meigara MyMeigara;
         MeigaraList MyMeigaraList;
+        SobacoConfig MyConfig;
 
-        ChartStyles ChartStyle;
-        AveSteps AveStep;
-
-        CandleSizes CandleSize;
         class CandleSizeScale {
             public int Days { get; private set; }
             public double Candle { get; private set; }
-
+            
             public CandleSizeScale(int days, double candle) {
                 this.Days = days;
                 this.Candle = candle;
             }
         }
         List<CandleSizeScale> CandleSizeList = new List<CandleSizeScale>() {
-            new CandleSizeScale(  20, 0.9),
-            new CandleSizeScale(  60, 0.8),
-            new CandleSizeScale( 120, 0.6),
+            // 日数、ロウソク幅
+            new CandleSizeScale(  60, 0.9),
+            new CandleSizeScale( 120, 0.8),
+            new CandleSizeScale( 180, 0.6),
             new CandleSizeScale( 240, 0.5),
             new CandleSizeScale( 720, 0.5)
         };
 
-        ChartScales ChartScale;
-        int IdouheikinLine1, IdouheikinLine2, IdouheikinLine3, IdouheikinLine4, IdouheikinLine5; // 移動平均線表示フラグ
-
         private static int InnerPlotPositionH = 96;
         private static int InnerPlotPositionW = 95;
-        private int Tab;
-        private string OkiniiriFileName;
 
         public MainForm() {
             InitializeComponent();
@@ -82,36 +80,69 @@ namespace sobaco {
             MyMeigaraList = new MeigaraList();
             int n = MyMeigaraList.SearchMeigaraList("");
 
-            WindowState = (FormWindowState)Properties.Settings.Default.WindowState;
-            Width = Properties.Settings.Default.Width;
-            Height = Properties.Settings.Default.Height;
-            ChartStyle = (ChartStyles)Properties.Settings.Default.Style;
-            AveStep = (AveSteps)Properties.Settings.Default.AveStep;
-            CandleSize = (CandleSizes)Properties.Settings.Default.CandleSize;
-            ChartScale = (ChartScales)Properties.Settings.Default.Scale;
-            IdouheikinLine1 = Properties.Settings.Default.H1;
-            IdouheikinLine2 = Properties.Settings.Default.H2;
-            IdouheikinLine3 = Properties.Settings.Default.H3;
-            IdouheikinLine4 = Properties.Settings.Default.H4;
-            IdouheikinLine5 = Properties.Settings.Default.H5;
-            Tab = Properties.Settings.Default.Tab;
-            OkiniiriFileName = Properties.Settings.Default.MeigaraFileName;
-            string[] codes = Properties.Settings.Default.Favorite.Split(',');
-            foreach (string s in codes)
-                MyMeigaraList.FavoriteAdd(s, MeigaraList.Proc.ADD);
+            System.Configuration.Configuration config =
+                System.Configuration.ConfigurationManager.OpenExeConfiguration(
+                    System.Configuration.ConfigurationUserLevel.PerUserRoamingAndLocal);
+            if (!System.IO.File.Exists(config.FilePath))
+                Properties.Settings.Default.Upgrade();
 
+            MyConfig = new SobacoConfig() {
+                ChartStyle = (ChartStyles)Properties.Settings.Default.Style,
+                AveStep = (AveSteps)Properties.Settings.Default.AveStep,
+                CandleSize = (CandleSizes)Properties.Settings.Default.CandleSize,
+                ChartScale = (ChartScales)Properties.Settings.Default.Scale,
+                IdouheikinLineWidth = new List<int> {
+                    Properties.Settings.Default.H1,
+                    Properties.Settings.Default.H2,
+                    Properties.Settings.Default.H3,
+                    Properties.Settings.Default.H4,
+                    Properties.Settings.Default.H5 },
+                HanbunPoint = new double[] {
+                    Properties.Settings.Default.Hanbun1,
+                    Properties.Settings.Default.Hanbun2,
+                    Properties.Settings.Default.Hanbun3,
+                    Properties.Settings.Default.Hanbun4 },
+                OkiniiriFileName = Properties.Settings.Default.OkiniiriFileName,
+            };
 
+            MyConfig.SetWindowState(this, (FormWindowState)Properties.Settings.Default.WindowState);
+            MyConfig.SetWidth(this, Properties.Settings.Default.Width);
+            MyConfig.SetHeight(this, Properties.Settings.Default.Height);
+            MyConfig.SetTab(tabControl1, Properties.Settings.Default.Tab);
+            MyConfig.SetIdouheikinFromString(Properties.Settings.Default.Idouheikin);
+
+            try {
+                MyMeigaraList.SetFavoriteList(Properties.Settings.Default.Favorites.Split(',').ToList<string>());
+            } catch {
+                MyMeigaraList.SetFavoriteList(new List<string> { "1001" });
+            }
             // ローソク足チャート初期設定
             CandlePreparation(chart1);
             // 日足、週足、月足の表示設定
-            ChangeChartScaleDisplay(ChartScale);
+            ChangeChartScaleDisplay(MyConfig.ChartScale);
             // 表示幅の表示設定
-            SizeCheckOnClick(CandleSize);
+            SizeCheckOnClick(MyConfig.CandleSize);
             // 移動平均の表示設定
-            AveStepChangeOnClick(AveStep);
+            AveStepChangeOnClick(MyConfig.AveStep);
+            //List<List<int>> normal = new List<List<int>> {
+            //    new List<int>() {5,25,75,200,0 },
+            //    new List<int>() {9,13,26,50,0 },
+            //    new List<int>() {6,12,24,60,0 }
+            //};
+            //List<List<int>> aiba = new List<List<int>> {
+            //    new List<int>() {5,20,60,100,300 },
+            //    new List<int>() {5,20,60,100,300 },
+            //    new List<int>() {5,20,60,100,300 }
+            //};
+            //MyConfig.IdouheikinScales = new List<List<List<int>>>() {
+            //    normal,
+            //    aiba
+            //};
+
+
             // 以前保存した銘柄ファイルがあるかチェック
-            if (OkiniiriFileName.Length == 0 || !System.IO.File.Exists(OkiniiriFileName))
-                OkiniiriFileName = "";
+            if (MyConfig.OkiniiriFileName.Length == 0 || !File.Exists(MyConfig.OkiniiriFileName))
+                MyConfig.OkiniiriFileName = "";
             if (OkiniiriEquals())
                 bSave.Enabled = false;
             else
@@ -150,8 +181,7 @@ namespace sobaco {
             this.dataGridView2.SelectionChanged += new System.EventHandler(this.DataGridView2_SelectionChanged);
             this.dataGridView3.SelectionChanged += new System.EventHandler(this.DataGridView3_SelectionChanged);
 
-            tabControl1.SelectedIndex = Tab;
-            switch (Tab) {
+            switch (tabControl1.SelectedIndex) {
                 case 0:
                     dataGridView1.Focus();
                     break;
@@ -163,7 +193,6 @@ namespace sobaco {
                     break;
             }
         }
-
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             if (!OkiniiriEquals() && MyMeigaraList.FavoritetableCount > 0) {
@@ -182,12 +211,12 @@ namespace sobaco {
 
         private bool OkiniiriEquals() {
             var codes = new List<string>();
-            if (OkiniiriFileName.Length > 0) {
+            if (MyConfig.OkiniiriFileName.Length > 0) {
                 using (System.IO.StreamReader sr =
-                            new System.IO.StreamReader(OkiniiriFileName, Encoding.GetEncoding("Shift_JIS"))) {
+                            new System.IO.StreamReader(MyConfig.OkiniiriFileName, Encoding.GetEncoding("Shift_JIS"))) {
 
                     while (!sr.EndOfStream) {
-                        string[] col = sr.ReadLine().Split(',');
+                        string[] col = sr.ReadLine().Split('\t');
                         codes.Add(col[0]);
                     }
                     sr.Close();
@@ -199,21 +228,26 @@ namespace sobaco {
         private void MainForm_Exit(object sender, EventArgs e) {
             //Configurationの作成
 
-            Properties.Settings.Default.WindowState = (int)this.WindowState;
-            Properties.Settings.Default.Width = this.Width;
-            Properties.Settings.Default.Height = this.Height;
-            Properties.Settings.Default.Style = (int)ChartStyle;
-            Properties.Settings.Default.AveStep = (int)AveStep;
-            Properties.Settings.Default.CandleSize = (int)CandleSize;
-            Properties.Settings.Default.Scale = (int)ChartScale;
-            Properties.Settings.Default.H1 = IdouheikinLine1;
-            Properties.Settings.Default.H2 = IdouheikinLine2;
-            Properties.Settings.Default.H3 = IdouheikinLine3;
-            Properties.Settings.Default.H4 = IdouheikinLine4;
-            Properties.Settings.Default.H5 = IdouheikinLine5;
+            Properties.Settings.Default.WindowState = (int)MyConfig.GetWindowState(this);
+            Properties.Settings.Default.Width = MyConfig.GetWidth(this);
+            Properties.Settings.Default.Height = MyConfig.GetHeight(this);
+            Properties.Settings.Default.Style = (int)MyConfig.ChartStyle;
+            Properties.Settings.Default.AveStep = (int)MyConfig.AveStep;
+            Properties.Settings.Default.CandleSize = (int)MyConfig.CandleSize;
+            Properties.Settings.Default.Scale = (int)MyConfig.ChartScale;
+            Properties.Settings.Default.H1 = MyConfig.IdouheikinLineWidth[0];
+            Properties.Settings.Default.H2 = MyConfig.IdouheikinLineWidth[1];
+            Properties.Settings.Default.H3 = MyConfig.IdouheikinLineWidth[2];
+            Properties.Settings.Default.H4 = MyConfig.IdouheikinLineWidth[3];
+            Properties.Settings.Default.H5 = MyConfig.IdouheikinLineWidth[4];
             Properties.Settings.Default.Tab = tabControl1.SelectedIndex;
-            Properties.Settings.Default.Favorite = string.Join(",", MyMeigaraList.FavoriteCodes);
-            Properties.Settings.Default.MeigaraFileName = OkiniiriFileName;
+            Properties.Settings.Default.Favorites = string.Join(",", MyMeigaraList.GetFavoriteList());
+            Properties.Settings.Default.OkiniiriFileName = MyConfig.OkiniiriFileName;
+            Properties.Settings.Default.Idouheikin = MyConfig.GetIdouheikinToString();
+            Properties.Settings.Default.Hanbun1 = MyConfig.HanbunPoint[0];
+            Properties.Settings.Default.Hanbun2 = MyConfig.HanbunPoint[1];
+            Properties.Settings.Default.Hanbun3 = MyConfig.HanbunPoint[2];
+            Properties.Settings.Default.Hanbun4 = MyConfig.HanbunPoint[3];
 
             Properties.Settings.Default.Save();
         }
@@ -265,8 +299,7 @@ namespace sobaco {
                 Hikaku(labelh2, _meigara.GetPtHeikin2(0), _meigara.GetPtHeikin2(1));
                 Hikaku(labelh3, _meigara.GetPtHeikin3(0), _meigara.GetPtHeikin3(1));
                 Hikaku(labelh4, _meigara.GetPtHeikin4(0), _meigara.GetPtHeikin4(1));
-                if (MyMeigara.AveStep == AveSteps.Aiba)
-                    Hikaku(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1));
+                Hikaku(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1));
 
                 // 上げから下げ、下げから上げに転じたら背景色を黄色に
                 if (_meigara.PtCount > 3) {
@@ -275,32 +308,37 @@ namespace sobaco {
                     Tenkan(labelh2, _meigara.GetPtHeikin2(0), _meigara.GetPtHeikin2(1), _meigara.GetPtHeikin2(2));
                     Tenkan(labelh3, _meigara.GetPtHeikin3(0), _meigara.GetPtHeikin3(1), _meigara.GetPtHeikin3(2));
                     Tenkan(labelh4, _meigara.GetPtHeikin4(0), _meigara.GetPtHeikin4(1), _meigara.GetPtHeikin4(2));
-                    if (MyMeigara.AveStep == AveSteps.Aiba)
-                        Tenkan(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1), _meigara.GetPtHeikin5(2));
+                    Tenkan(labelh5, _meigara.GetPtHeikin5(0), _meigara.GetPtHeikin5(1), _meigara.GetPtHeikin5(2));
                 }
                 // 移動平均線の順位入れ替わり
                 var d1 = Junni(_meigara, 0);
                 var d2 = Junni(_meigara, 1);
+                var ALARTCOLOR = Color.Violet;
                 for (var i = 0; i < d1.Count(); i++) {
                     if (d1[i] != d2[i])
                         switch (d1[i]) {
                             case "H1":
-                                labelh1.BackColor = Color.LightPink;
+                                labelh1.BackColor = ALARTCOLOR;
                                 break;
                             case "H2":
-                                labelh2.BackColor = Color.LightPink;
+                                labelh2.BackColor = ALARTCOLOR;
                                 break;
                             case "H3":
-                                labelh3.BackColor = Color.LightPink;
+                                labelh3.BackColor = ALARTCOLOR;
                                 break;
                             case "H4":
-                                labelh4.BackColor = Color.LightPink;
+                                labelh4.BackColor = ALARTCOLOR;
                                 break;
                             case "H5":
-                                labelh5.BackColor = Color.LightPink;
+                                labelh5.BackColor = ALARTCOLOR;
                                 break;
                         }
                 }
+                // 半分の法則
+                if (Hanbun(_meigara))
+                    labelc.BackColor = Color.Lime;
+                else
+                    labelc.BackColor = SystemColors.Control;
             }
         }
 
@@ -315,11 +353,11 @@ namespace sobaco {
             var _count = 1;
             var _close = _meigara.GetPtClose(1);
             if (isUp)
-                while (_meigara.GetPtClose(_count) >= _meigara.GetPtClose(_count + 1)) {
+                while (_count < (_meigara.PtCount - 1) && _meigara.GetPtClose(_count) >= _meigara.GetPtClose(_count + 1)) {
                     _count++;
                 }
             else
-                while (_meigara.GetPtClose(_count) < _meigara.GetPtClose(_count + 1)) {
+                while (_count < (_meigara.PtCount - 1) && _meigara.GetPtClose(_count) < _meigara.GetPtClose(_count + 1)) {
                     _count++;
                 }
             return _count;          
@@ -345,7 +383,12 @@ namespace sobaco {
         /// <param name="n1"></param>
         /// <param name="n2"></param>
         private void Hikaku(ToolStripLabel lab, double n1, double n2) {
-            double n = (n1 - n2) / n2 * 100;
+            if (n1 == 0) {
+                lab.Text = "";
+                return;
+            }
+
+            double n = ((n1 - n2) / n2) * 100;
             if (n > 0)
                 lab.ForeColor = Color.Blue;
             else if (n == 0)
@@ -363,11 +406,39 @@ namespace sobaco {
         /// <param name="n2"></param>
         /// <param name="n3"></param>
         private void Tenkan(ToolStripLabel lab, double n1, double n2, double n3) {
-            double n = (n1 - n2) * (n2 - n3);
-            if (n <= 0)
-                lab.BackColor = Color.Yellow;
+            if (n1 == 0)
+                return;
+
+            if ((n1 - n2) * (n2 - n3) <= 0)
+                lab.BackColor = Color.Gold;
             else
                 lab.BackColor = SystemColors.Control;
+        }
+
+        /// <summary>
+        /// 半分の法則
+        /// </summary>
+        /// <param name="_meigara"></param>
+        /// <returns></returns>
+        private bool Hanbun(Meigara _meigara) {
+            double diff = Math.Abs(_meigara.GetPtOpen(0) - _meigara.GetPtClose(0));
+
+            if (_meigara.GetPtOpen(0) < _meigara.GetPtClose(0)) {
+                //陽線
+                if ((_meigara.GetPtOpen(0) + diff * (MyConfig.HanbunPoint[1] / 100)) < _meigara.GetPtHeikin1(0)
+                    && _meigara.GetPtHeikin1(0) < (_meigara.GetPtOpen(0) + diff * (MyConfig.HanbunPoint[0] / 100)))
+                    return true;
+                else
+                    return false;
+
+            } else {
+                // 陰線
+                if ((_meigara.GetPtClose(0) + diff * (MyConfig.HanbunPoint[3] / 100)) < _meigara.GetPtHeikin1(0) 
+                    && _meigara.GetPtHeikin1(0) < (_meigara.GetPtClose(0) + diff * (MyConfig.HanbunPoint[2] / 100)))
+                    return true;
+                else
+                    return false;
+            }
         }
 
         /// <summary>
@@ -385,7 +456,7 @@ namespace sobaco {
             _chart.ChartAreas[0].AxisX.IntervalOffset = 1;
 
             // ローソク足の間隔
-            _chart.Series["CANDLE"]["PointWidth"] = CandleSizeList[(int)CandleSize].Candle.ToString();
+            _chart.Series["CANDLE"]["PointWidth"] = CandleSizeList[(int)MyConfig.CandleSize].Candle.ToString();
 
             // 各グラフを初期化
             _chart.Series["CANDLE"].Points.Clear();
@@ -405,7 +476,7 @@ namespace sobaco {
         /// <param name="xlabel"></param>
         private void CandleDraw(Meigara _meigara, Chart _chart,  int i) {
             string _labelString = _meigara.GetPtDateLabel(i);
-            switch (ChartStyle) {
+            switch (MyConfig.ChartStyle) {
                 case ChartStyles.Candle:
                     _chart.Series["CANDLE"].Points.AddXY(_labelString, _meigara.GetPtHigh(i));
                     _chart.Series["CANDLE"].Points[i].YValues[1] = _meigara.GetPtLow(i);
@@ -421,17 +492,19 @@ namespace sobaco {
             //// 移動平均線の描画
             void DrawLine(double n, Series ser, int w)
             {
+                if (n == 0)
+                    return;
+
                 if (n > 0) {
                     ser.BorderWidth = w;
                     ser.Points.AddXY(_labelString, n);
                 }
             }
-            DrawLine(_meigara.GetPtHeikin1(i), _chart.Series["IDOU1"], IdouheikinLine1);
-            DrawLine(_meigara.GetPtHeikin2(i), _chart.Series["IDOU2"], IdouheikinLine2);
-            DrawLine(_meigara.GetPtHeikin3(i), _chart.Series["IDOU3"], IdouheikinLine3);
-            DrawLine(_meigara.GetPtHeikin4(i), _chart.Series["IDOU4"], IdouheikinLine4);
-            if (AveStep == AveSteps.Aiba)
-                DrawLine(_meigara.GetPtHeikin5(i), _chart.Series["IDOU5"], IdouheikinLine5);
+            DrawLine(_meigara.GetPtHeikin1(i), _chart.Series["IDOU1"], MyConfig.IdouheikinLineWidth[0]);
+            DrawLine(_meigara.GetPtHeikin2(i), _chart.Series["IDOU2"], MyConfig.IdouheikinLineWidth[1]);
+            DrawLine(_meigara.GetPtHeikin3(i), _chart.Series["IDOU3"], MyConfig.IdouheikinLineWidth[2]);
+            DrawLine(_meigara.GetPtHeikin4(i), _chart.Series["IDOU4"], MyConfig.IdouheikinLineWidth[3]);
+            DrawLine(_meigara.GetPtHeikin5(i), _chart.Series["IDOU5"], MyConfig.IdouheikinLineWidth[4]);
         }
 
         /// <summary>
@@ -509,22 +582,27 @@ namespace sobaco {
             var oldMeigara = MyMeigara;
 
             try {
-                MyMeigara = new Meigara(s);
-
-                // テーブル作成
+                MyMeigara = new Meigara(s, MyConfig.IdouheikinScales);
                 MyMeigara.MakeTable(MyMeigara.PlotEnd,
-                            CandleSizeList[(int)CandleSize].Days,
-                            ChartScale,
-                            AveStep);
-                // 描画
-                DrawTable(MyMeigara, chart1);
+                    CandleSizeList[(int)MyConfig.CandleSize].Days,
+                    MyConfig.ChartScale,
+                    MyConfig.AveStep);
             } catch {
                 MyMeigara.Dispose();
                 MyMeigara = oldMeigara;
+                MyMeigara.MakeTable(MyMeigara.PlotEnd,
+                    CandleSizeList[(int)MyConfig.CandleSize].Days,
+                    MyConfig.ChartScale,
+                    MyConfig.AveStep);
                 Debug.WriteLine("MakeTableAndDraw Error : " + s);
                 this.Cursor = _Cursor;
                 return;
             }
+            // テーブル作成
+
+            // 描画
+            DrawTable(MyMeigara, chart1);
+
             // 履歴登録
             if (MyMeigaraList.AddHistory(s))
                 dataGridView3.Rows[0].Selected = true;
@@ -665,7 +743,16 @@ namespace sobaco {
             PrintPageCount = 1;
 
             if (printDialog1.ShowDialog() == DialogResult.OK) {
+                toolStripProgressBar1.Minimum = 0;
+                toolStripProgressBar1.Value = 0;
+                toolStripStatusLabel1.Text = "印刷中";
+
                 printDocument1.Print();
+
+                toolStripStatusLabel1.Text = "完了";
+                System.Threading.Thread.Sleep(3000);
+                toolStripStatusLabel1.Text = "";
+                toolStripProgressBar1.Value = 0;
             }
         }
 
@@ -675,17 +762,28 @@ namespace sobaco {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Pd_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
+            ActiveMarket.Calendar calendar = new ActiveMarket.Calendar();
+
+            int plotend;
+            if (MyMeigara != null)
+                plotend = MyMeigara.PlotEnd;
+            else
+                plotend = calendar.DatePosition(DateTime.Now, -1);
+
             // お気に入りタブが表示されている場合、印刷範囲がすべての場合は、お気に入り登録されている銘柄すべてを印刷
             if (tabControl1.SelectedIndex == 1) {
                 // お気に入りに銘柄が1つ以上ある場合
                 if (MyMeigaraList.FavoritetableCount > 0) {
                     switch (e.PageSettings.PrinterSettings.PrintRange) {
                         case System.Drawing.Printing.PrintRange.AllPages:
+                            toolStripProgressBar1.Maximum = MyMeigaraList.FavoritetableCount;
+                            toolStripProgressBar1.Value = PrintPageCount;
+
                             if (PrintPageCount < MyMeigaraList.FavoritetableCount)
                                 e.HasMorePages = true;
                             else
                                 e.HasMorePages = false;
-                            PagePrint(MyMeigaraList.GetFavoriteTableCode(PrintPageCount - 1), MyMeigara.PlotEnd, e);
+                            PagePrint(MyMeigaraList.GetFavoriteTableCode(PrintPageCount - 1), plotend, e);
                             break;
                         case System.Drawing.Printing.PrintRange.SomePages:
                             if (PrintPageCount < printDialog1.PrinterSettings.ToPage) {
@@ -697,11 +795,15 @@ namespace sobaco {
                                 e.HasMorePages = true;
                             } else
                                 e.HasMorePages = false;
-                            PagePrint(MyMeigaraList.GetFavoriteTableCode(PrintPageCount - 1), MyMeigara.PlotEnd, e);
+
+                            toolStripProgressBar1.Maximum = printDialog1.PrinterSettings.ToPage - printDialog1.PrinterSettings.FromPage + 1;
+                            toolStripProgressBar1.Value = PrintPageCount - printDialog1.PrinterSettings.FromPage;
+
+                            PagePrint(MyMeigaraList.GetFavoriteTableCode(PrintPageCount - 1), plotend, e);
                             break;
                         default:
                             e.HasMorePages = false;
-                            PagePrint(MyMeigara.Code, MyMeigara.PlotEnd, e);
+                            PagePrint(MyMeigara.Code, plotend, e);
                             break;
                     }
                 }
@@ -716,20 +818,23 @@ namespace sobaco {
         private void PagePrint(string code, int endpoint, System.Drawing.Printing.PrintPageEventArgs e) {
             // 印刷用チャートの作成
             Chart printChart = new Chart();
-            Meigara printMeigara = new Meigara(code);
+            Meigara printMeigara = new Meigara(code, MyConfig.IdouheikinScales);
 
             printChart.Width = e.MarginBounds.Width;
             printChart.Height = e.MarginBounds.Height;
             CandlePreparation(printChart);
-            printMeigara.MakeTable(endpoint,
-                        CandleSizeList[(int)CandleSize].Days,
-                        ChartScale, 
-                        AveStep);
-            CandleSetting(printMeigara, printChart);
+            try {
+                printMeigara.MakeTable(endpoint,
+                            CandleSizeList[(int)MyConfig.CandleSize].Days,
+                            MyConfig.ChartScale,
+                            MyConfig.AveStep);
 
-            for (int i = 0; i < printMeigara.PtCount; i++) {
-                // ローソク足チャートの描画
-                CandleDraw(printMeigara, printChart, i);
+                CandleSetting(printMeigara, printChart);
+                for (int i = 0; i < printMeigara.PtCount; i++) {
+                    // ローソク足チャートの描画
+                    CandleDraw(printMeigara, printChart, i);
+                }
+            } catch {
             }
 
             // 600dpi 7016 x 4961
@@ -761,16 +866,18 @@ namespace sobaco {
         }
 
         private void ExportToPDF() {
-            if (MyMeigara == null)
+            if (tabControl1.SelectedIndex == 1 && MyMeigaraList.FavoritetableCount == 0)
+                return;
+            if (tabControl1.SelectedIndex != 1 && MyMeigara == null)
                 return;
 
-            iTextSharp.text.FontFactory.RegisterDirectories();
-            iTextSharp.text.Font font = iTextSharp.text.FontFactory.GetFont("MS-Mincho", iTextSharp.text.pdf.BaseFont.IDENTITY_H,
-                  iTextSharp.text.pdf.BaseFont.NOT_EMBEDDED, 10);
-            iTextSharp.text.Font fontGothic = iTextSharp.text.FontFactory.GetFont("MS-Gothic", iTextSharp.text.pdf.BaseFont.IDENTITY_H,
-                  iTextSharp.text.pdf.BaseFont.NOT_EMBEDDED, 10);
+            iText.FontFactory.RegisterDirectories();
+            iText.Font font = iText.FontFactory.GetFont("MS-Mincho", iTextPdf.BaseFont.IDENTITY_H,
+                  iTextPdf.BaseFont.NOT_EMBEDDED, 10);
+            iText.Font fontGothic = iText.FontFactory.GetFont("MS-Gothic", iTextPdf.BaseFont.IDENTITY_H,
+                  iTextPdf.BaseFont.NOT_EMBEDDED, 10);
 
-            iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4.Rotate(), 8, 8, 40, 20);
+            iText.Document pdfDoc = new iText.Document(iText.PageSize.A4.Rotate(), 8, 8, 40, 20);
             //ファイルの出力先を設定
             saveFileDialog1.Filter = "ＰＤＦファイル(*.pdf)|*.pdf";
             saveFileDialog1.Title = "ＰＤＦファイル出力";
@@ -785,35 +892,47 @@ namespace sobaco {
                 if (tabControl1.SelectedIndex == 1) {
 
                     using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create)) {
-                        iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, fs);
+                        iTextPdf.PdfWriter writer = iTextPdf.PdfWriter.GetInstance(pdfDoc, fs);
 
                         pdfDoc.Open();
+                        toolStripProgressBar1.Maximum = MyMeigaraList.FavoritetableCount;
+                        toolStripProgressBar1.Minimum = 0;
+                        toolStripProgressBar1.Value = 0;
+                        toolStripStatusLabel1.Text = "チャート出力中";
                         var cnt = 1;
-                        foreach (string _code in MyMeigaraList.FavoriteCodes) {
+                        foreach (string _code in MyMeigaraList.GetFavoriteList()) {
                             if (pdfDoc.PageNumber != 0)
                                 pdfDoc.NewPage();
                             pdfDoc.Add(MakePdfPage(_code));
 
+                            toolStripProgressBar1.Value = cnt;
                             cnt++;
                         }
 
                         // しおり作成
-                        iTextSharp.text.pdf.PdfAction pdfaction;
-                        iTextSharp.text.pdf.PdfContentByte contentByte = writer.DirectContent;
+                        toolStripStatusLabel1.Text = "しおり作成中";
+                        toolStripProgressBar1.Value = 0;
+                        iTextPdf.PdfAction pdfaction;
+                        iTextPdf.PdfContentByte contentByte = writer.DirectContent;
                         cnt = 1;
-                        foreach (string s in MyMeigaraList.FavoriteCodes) {
-                            iTextSharp.text.Paragraph p = new iTextSharp.text.Paragraph($"{s} {MyMeigaraList.GetNameByCode(s)}", fontGothic);
-                            pdfaction = iTextSharp.text.pdf.PdfAction.GotoLocalPage(cnt, new iTextSharp.text.pdf.PdfDestination(iTextSharp.text.pdf.PdfDestination.XYZ, -1, 10000, 0), writer);
-                            iTextSharp.text.pdf.PdfOutline outRoot = new iTextSharp.text.pdf.PdfOutline(contentByte.RootOutline, pdfaction, p, true);
+                        foreach (string s in MyMeigaraList.GetFavoriteList()) {
+                            iText.Paragraph p = new iText.Paragraph($"{s} {MyMeigaraList.GetNameByCode(s)}", fontGothic);
+                            pdfaction = iTextPdf.PdfAction.GotoLocalPage(cnt, new iTextPdf.PdfDestination(iTextPdf.PdfDestination.XYZ, -1, 10000, 0), writer);
+                            iTextPdf.PdfOutline outRoot = new iTextPdf.PdfOutline(contentByte.RootOutline, pdfaction, p, true);
+                            toolStripProgressBar1.Value = cnt;
                             cnt++;
                         }
 
+                        toolStripStatusLabel1.Text = "完了";
+                        System.Threading.Thread.Sleep(3000);
                         pdfDoc.Close();
+                        toolStripProgressBar1.Value = 0;
+                        toolStripStatusLabel1.Text = "";
                     }
 
                 } else {
                     using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.Create)) {
-                        iTextSharp.text.pdf.PdfWriter.GetInstance(pdfDoc, fs);
+                        iTextPdf.PdfWriter.GetInstance(pdfDoc, fs);
 
                         pdfDoc.Open();
                         pdfDoc.Add(MakePdfPage(MyMeigara.Code));
@@ -826,23 +945,33 @@ namespace sobaco {
             }
         }
 
-        private iTextSharp.text.Image MakePdfPage(string code) {
+        private iText.Image MakePdfPage(string code) {
+            ActiveMarket.Calendar calendar = new ActiveMarket.Calendar();
+            int plotend;
+            if (MyMeigara != null)
+                plotend = MyMeigara.PlotEnd;
+            else
+                plotend = calendar.DatePosition(DateTime.Now, -1);
+
             // 印刷用チャートの作成
             Chart pdfChart = new Chart();
-            Meigara pdfMeigara = new Meigara(code);
+            Meigara pdfMeigara = new Meigara(code, MyConfig.IdouheikinScales);
 
             pdfChart.Width = 1200;
             pdfChart.Height = 848;
             CandlePreparation(pdfChart);
-            pdfMeigara.MakeTable(MyMeigara.PlotEnd,
-                        CandleSizeList[(int)CandleSize].Days,
-                        ChartScale, 
-                        AveStep);
-            CandleSetting(pdfMeigara, pdfChart);
+            try {
+                pdfMeigara.MakeTable(plotend,
+                            CandleSizeList[(int)MyConfig.CandleSize].Days,
+                            MyConfig.ChartScale,
+                            MyConfig.AveStep);
 
-            for (int i = 0; i < pdfMeigara.PtCount; i++) {
-                // ローソク足チャートの描画
-                CandleDraw(pdfMeigara, pdfChart, i);
+                CandleSetting(pdfMeigara, pdfChart);
+                for (int i = 0; i < pdfMeigara.PtCount; i++) {
+                    // ローソク足チャートの描画
+                    CandleDraw(pdfMeigara, pdfChart, i);
+                }
+            } catch {
             }
 
             Bitmap chartBitmap = new Bitmap(pdfChart.Width, pdfChart.Height);
@@ -858,7 +987,7 @@ namespace sobaco {
                 _graphics.DrawString(_ValueString, _font, Brushes.Black, 300, 3);
             }
 
-            iTextSharp.text.Image pdfImage = iTextSharp.text.Image.GetInstance(chartBitmap, System.Drawing.Imaging.ImageFormat.Bmp);
+            iText.Image pdfImage = iText.Image.GetInstance(chartBitmap, System.Drawing.Imaging.ImageFormat.Bmp);
             pdfImage.ScalePercent(70f, 64f);
 
             chartBitmap.Dispose();
@@ -887,16 +1016,16 @@ namespace sobaco {
                 return;
             // 印刷用チャートの作成
             Chart paintChart = new Chart();
-            Meigara paintMeigara = new Meigara(MyMeigara.Code);
+            Meigara paintMeigara = new Meigara(MyMeigara.Code, MyConfig.IdouheikinScales);
             // 
             paintChart.Width = 1200;
             paintChart.Height = 848;
 
             CandlePreparation(paintChart);
             paintMeigara.MakeTable(MyMeigara.PlotEnd,
-                        CandleSizeList[(int)CandleSize].Days,
-                        ChartScale, 
-                        AveStep);
+                        CandleSizeList[(int)MyConfig.CandleSize].Days,
+                        MyConfig.ChartScale, 
+                        MyConfig.AveStep);
             CandleSetting(paintMeigara, paintChart);
 
             for (int i = 0; i < paintMeigara.PtCount; i++) {
@@ -1099,26 +1228,30 @@ namespace sobaco {
         /// </summary>
         private void OkiniiriRead() {
             // Displays an OpenFileDialog so the user can select a Cursor.
-            openFileDialog1.Filter = "お気に入り銘柄(*.sob;*.csv)|*.sob;*.csv";
+            openFileDialog1.Filter = "お気に入り銘柄(*.sob;*.csv;*.pqn)|*.sob;*.csv;*.pqn";
             openFileDialog1.Title = "お気に入り銘柄ファイルの選択";
             openFileDialog1.FileName = "お気に入り.sob";
 
             // Show the Dialog.
             // If the user clicked OK in the dialog and
             // a .CUR file was selected, open it.
+            if (MyConfig.OkiniiriFileName != "")
+                openFileDialog1.InitialDirectory = Path.GetFullPath(MyConfig.OkiniiriFileName);
+
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 // Assign the cursor in the Stream to the Form's Cursor property.
                 using (System.IO.StreamReader sr =
                         new System.IO.StreamReader(openFileDialog1.FileName, Encoding.GetEncoding("Shift_JIS"))) {
                     var codes = new List<string>();
                     while (!sr.EndOfStream) {
-                        string[] col = sr.ReadLine().Split(',');
+                        string[] col = sr.ReadLine().Split(new char[] { ',', '\t' });
                         codes.Add(col[0]);
                     }
                     sr.Close();
 
-                    int n = MyMeigaraList.FavoriteRead(codes);
-                    OkiniiriFileName = openFileDialog1.FileName;
+                    int n = MyMeigaraList.SetFavoriteList(codes);
+                    MyConfig.OkiniiriFileName = openFileDialog1.FileName;
+                    bSave.Enabled = false;
                 }
 
                 tabControl1.SelectedIndex = 1;
@@ -1133,27 +1266,19 @@ namespace sobaco {
         private void OkiniiriSave() {
             if (bSave.Enabled) {
                 // ファイル名が登録されていないなら名前を付けて保存
-                if (OkiniiriFileName.Length == 0)
+                if (MyConfig.OkiniiriFileName == "")
                     OkiniiriSaveAs();
                 else
                     try {
                         using (System.IO.StreamWriter sw =
-                                    new System.IO.StreamWriter(OkiniiriFileName, false, Encoding.GetEncoding("Shift_JIS"))) {
+                                    new System.IO.StreamWriter(MyConfig.OkiniiriFileName, false, Encoding.GetEncoding("Shift_JIS"))) {
 
-                            foreach (DataRow row in MyMeigaraList.FavoriteTable.Rows) {
-                                for (int i = 0; i < MyMeigaraList.FavoriteTableColumnsCount; i++) {
-                                    string _field = row[i].ToString();
-                                    _field = EncloseDoubleQuotesIfNeed(_field);
-                                    sw.Write(_field);
-                                    if ((MyMeigaraList.FavoritetableCount - 1) > i)
-                                        sw.Write(',');
-                                }
-                                sw.Write("\n");
-                            }
+                            foreach (DataRow row in MyMeigaraList.FavoriteTable.Rows)
+                                sw.WriteLine($"{row[0].ToString()}\t{row[1].ToString()}");
                         }
                         bSave.Enabled = false;
 
-                    } catch (Exception ex) {
+                    } catch {
                         Debug.WriteLine("File Save Error");
                     }
             }
@@ -1163,27 +1288,22 @@ namespace sobaco {
         /// お気に入りリストの保存
         /// </summary>
         private void OkiniiriSaveAs() {
-            saveFileDialog1.Filter = "銘柄ファイル(*.sob;*.csv)|*.sob;*.csv";
+            saveFileDialog1.Filter = "銘柄ファイル(*.sob;*.csv;*.pqn)|*.sob;*.csv;*.pqn";
             saveFileDialog1.Title = "お気に入り銘柄ファイルの保存";
             saveFileDialog1.AddExtension = true;
             saveFileDialog1.FileName = "お気に入り.sob";
+
+            if (MyConfig.OkiniiriFileName != "")
+                saveFileDialog1.InitialDirectory = Path.GetFullPath(MyConfig.OkiniiriFileName);
 
             if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 using (System.IO.StreamWriter sw =
                     new System.IO.StreamWriter(saveFileDialog1.FileName, false, Encoding.GetEncoding("Shift_JIS"))) {
 
-                    foreach (DataRow row in MyMeigaraList.FavoriteTable.Rows) {
-                        for (int i = 0; i < MyMeigaraList.FavoriteTableColumnsCount; i++) {
-                            string _field = row[i].ToString();
-                            _field = EncloseDoubleQuotesIfNeed(_field);
-                            sw.Write(_field);
-                            if ((MyMeigaraList.FavoritetableCount - 1) > i)
-                                sw.Write(',');
-                        }
-                        sw.Write("\n");
-                    }
+                    foreach (DataRow row in MyMeigaraList.FavoriteTable.Rows)
+                        sw.WriteLine($"{row[0].ToString()}\t{row[1].ToString()}");
                 }
-                OkiniiriFileName = saveFileDialog1.FileName;
+                MyConfig.OkiniiriFileName = saveFileDialog1.FileName;
                 bSave.Enabled = false;
             }
         }
@@ -1244,7 +1364,8 @@ namespace sobaco {
         /// <param name="e"></param>
         private void ToolStripButton14_Click(object sender, EventArgs e) {
             if (MyMeigara != null)
-                if (MyMeigaraList.FavoriteAdd(MyMeigara.Code, MeigaraList.Proc.ADD)) {
+                if (MyMeigaraList.AddFavorite(MyMeigara.Code, MeigaraList.Proc.ADD)) {
+                    tabControl1.SelectedIndex = 1;
                     dataGridView2.CurrentCell = dataGridView2[0, dataGridView2.Rows.Count - 1];
                     bSave.Enabled = true;
                 }
@@ -1252,7 +1373,8 @@ namespace sobaco {
 
         private void AddFavoriteToolStripMenuItem_Click(object sender, EventArgs e) {
             if (MyMeigara != null)
-                if (MyMeigaraList.FavoriteAdd(MyMeigara.Code, MeigaraList.Proc.ADD)) {
+                if (MyMeigaraList.AddFavorite(MyMeigara.Code, MeigaraList.Proc.ADD)) {
+                    tabControl1.SelectedIndex = 1;
                     dataGridView2.CurrentCell = dataGridView2[0, dataGridView2.Rows.Count - 1];
                     bSave.Enabled = true;
                 }
@@ -1265,7 +1387,7 @@ namespace sobaco {
         /// <param name="e"></param>
         private void ClearAllToolStripMenuItem_Click(object sender, EventArgs e) {
             if (MyMeigara != null) {
-                MyMeigaraList.FavoriteClear();
+                MyMeigaraList.ClearFavorite();
                 bSave.Enabled = true;
             }
         }
@@ -1277,14 +1399,14 @@ namespace sobaco {
         /// <param name="e"></param>
         private void ToolStripButton15_Click(object sender, EventArgs e) {
             if (MyMeigara != null) {
-                MyMeigaraList.FavoriteSub(MyMeigara.Code);
+                MyMeigaraList.SubFavorite(MyMeigara.Code);
                 bSave.Enabled = true;
             }
         }
 
         private void RemoveFavoriteToolStripMenuItem_Click(object sender, EventArgs e) {
             if (MyMeigara != null) {
-                MyMeigaraList.FavoriteSub(MyMeigara.Code);
+                MyMeigaraList.SubFavorite(MyMeigara.Code);
                 bSave.Enabled = true;
             }
         }
@@ -1298,8 +1420,8 @@ namespace sobaco {
         private void MoveTopToolStripMenuItem_Click(object sender, EventArgs e) {
             var pos = dataGridView2.SelectedRows[0].Index;
             string code = MyMeigaraList.GetFavoriteTableCode(dataGridView2.SelectedRows[0].Index);
-            MyMeigaraList.FavoriteSub(code);
-            MyMeigaraList.FavoriteAdd(code, MeigaraList.Proc.INSERT);
+            MyMeigaraList.SubFavorite(code);
+            MyMeigaraList.AddFavorite(code, MeigaraList.Proc.INSERT);
             if ((MyMeigaraList.FavoritetableCount - 1) > pos)
                 dataGridView2.Rows[pos + 1].Selected = true;
             else
@@ -1315,7 +1437,7 @@ namespace sobaco {
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e) {
             var pos = dataGridView2.SelectedRows[0].Index;
             string code = MyMeigaraList.GetFavoriteTableCode(pos);
-            MyMeigaraList.FavoriteSub(code);
+            MyMeigaraList.SubFavorite(code);
             if (MyMeigaraList.FavoritetableCount > pos)
                 dataGridView2.Rows[pos].Selected = true;
             else
@@ -1407,6 +1529,69 @@ namespace sobaco {
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// 設定ファイル保存
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveConfigToolStripMenuItem_Click(object sender, EventArgs e) {
+            saveFileDialog1.Filter = "設定保存|*.cfg";
+            saveFileDialog1.Title = "設定の保存";
+            saveFileDialog1.AddExtension = true;
+            saveFileDialog1.FileName = "sobaco.cfg";
+
+            if (MyConfig.OkiniiriFileName != "")
+                saveFileDialog1.InitialDirectory = Path.GetFullPath(MyConfig.OkiniiriFileName);
+
+            var settings = new XmlWriterSettings {
+                Encoding = new System.Text.UTF8Encoding(false),
+                Indent = true,
+                IndentChars = "  ",
+            };
+            if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                MyConfig.MakeSerialize(this, tabControl1, MyMeigaraList);
+
+                using (var writer = XmlWriter.Create(saveFileDialog1.FileName, settings)) {
+                    var serializer = new DataContractSerializer(MyConfig.GetType());
+                    serializer.WriteObject(writer, MyConfig);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 設定ファイル読込
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoadConfigToolStripMenuItem_Click(object sender, EventArgs e) {
+            // Displays an OpenFileDialog so the user can select a Cursor.
+            openFileDialog1.Filter = "設定読込|*.cfg";
+            openFileDialog1.Title = "設定の読み込み";
+            openFileDialog1.FileName = "sobaco.cfg";
+
+            if (MyConfig.OkiniiriFileName != "")
+                saveFileDialog1.InitialDirectory = Path.GetFullPath(MyConfig.OkiniiriFileName);
+
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                using (var reader = XmlReader.Create(openFileDialog1.FileName)) {
+                    var serializer = new DataContractSerializer(typeof(SobacoConfig));
+                    MyConfig = serializer.ReadObject(reader) as SobacoConfig;
+
+                    MyConfig.EvalSerialize(this, tabControl1, MyMeigaraList);
+                }
+            }
+        }
+
+        private void HanbunToolStripMenuItem_Click(object sender, EventArgs e) {
+            Debug.WriteLine(MyConfig.GetUserSettingIdouheikins()[0][0]);
+            SetHanbunForm hanbunForm = new SetHanbunForm(MyConfig.HanbunPoint, MyConfig.GetUserSettingIdouheikins());
+            if (hanbunForm.ShowDialog() == DialogResult.OK) {
+                MyConfig.HanbunPoint = hanbunForm.Point;
+                MyConfig.SetUserSettingIdouheikins(hanbunForm.Idouheikins);
+            }
+            hanbunForm.Dispose();
         }
     }
 }

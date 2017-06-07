@@ -241,7 +241,7 @@
             this.bSquare.Name = "bSquare";
             this.bSquare.Size = new System.Drawing.Size(23, 37);
             this.bSquare.Text = "長方形";
-            this.bSquare.Click += new System.EventHandler(this.bSquare_Click);
+            this.bSquare.Click += new System.EventHandler(this.BSquare_Click);
             // 
             // bSquareFill
             // 
@@ -251,7 +251,7 @@
             this.bSquareFill.Name = "bSquareFill";
             this.bSquareFill.Size = new System.Drawing.Size(23, 37);
             this.bSquareFill.Text = "塗りつぶし長方形";
-            this.bSquareFill.Click += new System.EventHandler(this.bSquareFill_Click);
+            this.bSquareFill.Click += new System.EventHandler(this.BSquareFill_Click);
             // 
             // bText
             // 

@@ -194,24 +194,104 @@ namespace sobaco.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1001")]
-        public string Favorite {
+        public string Favorites {
             get {
-                return ((string)(this["Favorite"]));
+                return ((string)(this["Favorites"]));
             }
             set {
-                this["Favorite"] = value;
+                this["Favorites"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MeigaraFileName {
+        public string OkiniiriFileName {
             get {
-                return ((string)(this["MeigaraFileName"]));
+                return ((string)(this["OkiniiriFileName"]));
             }
             set {
-                this["MeigaraFileName"] = value;
+                this["OkiniiriFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfArrayOfArrayOfInt xmlns:xsi=\"htt" +
+            "p://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSch" +
+            "ema\">\r\n  <ArrayOfArrayOfInt>\r\n    <ArrayOfInt>\r\n      <int>5</int>\r\n      <int>2" +
+            "5</int>\r\n      <int>75</int>\r\n      <int>200</int>\r\n      <int>0</int>\r\n    </Ar" +
+            "rayOfInt>\r\n    <ArrayOfInt>\r\n      <int>9</int>\r\n      <int>13</int>\r\n      <int" +
+            ">26</int>\r\n      <int>50</int>\r\n      <int>0</int>\r\n    </ArrayOfInt>\r\n    <Arra" +
+            "yOfInt>\r\n      <int>6</int>\r\n      <int>12</int>\r\n      <int>24</int>\r\n      <in" +
+            "t>60</int>\r\n      <int>0</int>\r\n    </ArrayOfInt>\r\n  </ArrayOfArrayOfInt>\r\n  <Ar" +
+            "rayOfArrayOfInt>\r\n    <ArrayOfInt>\r\n      <int>5</int>\r\n      <int>20</int>\r\n   " +
+            "   <int>60</int>\r\n      <int>100</int>\r\n      <int>300</int>\r\n    </ArrayOfInt>\r" +
+            "\n    <ArrayOfInt>\r\n      <int>5</int>\r\n      <int>20</int>\r\n      <int>60</int>\r" +
+            "\n      <int>100</int>\r\n      <int>300</int>\r\n    </ArrayOfInt>\r\n    <ArrayOfInt>" +
+            "\r\n      <int>5</int>\r\n      <int>20</int>\r\n      <int>60</int>\r\n      <int>100</" +
+            "int>\r\n      <int>300</int>\r\n    </ArrayOfInt>\r\n  </ArrayOfArrayOfInt>\r\n  <ArrayO" +
+            "fArrayOfInt>\r\n    <ArrayOfInt>\r\n      <int>7</int>\r\n      <int>14</int>\r\n      <" +
+            "int>42</int>\r\n      <int>0</int>\r\n      <int>0</int>\r\n    </ArrayOfInt>\r\n    <Ar" +
+            "rayOfInt>\r\n      <int>7</int>\r\n      <int>14</int>\r\n      <int>42</int>\r\n      <" +
+            "int>0</int>\r\n      <int>0</int>\r\n    </ArrayOfInt>\r\n    <ArrayOfInt>\r\n      <int" +
+            ">7</int>\r\n      <int>14</int>\r\n      <int>42</int>\r\n      <int>0</int>\r\n      <i" +
+            "nt>0</int>\r\n    </ArrayOfInt>\r\n  </ArrayOfArrayOfInt>\r\n</ArrayOfArrayOfArrayOfIn" +
+            "t>")]
+        public string Idouheikin {
+            get {
+                return ((string)(this["Idouheikin"]));
+            }
+            set {
+                this["Idouheikin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("70")]
+        public double Hanbun1 {
+            get {
+                return ((double)(this["Hanbun1"]));
+            }
+            set {
+                this["Hanbun1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public double Hanbun2 {
+            get {
+                return ((double)(this["Hanbun2"]));
+            }
+            set {
+                this["Hanbun2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("95")]
+        public double Hanbun3 {
+            get {
+                return ((double)(this["Hanbun3"]));
+            }
+            set {
+                this["Hanbun3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public double Hanbun4 {
+            get {
+                return ((double)(this["Hanbun4"]));
+            }
+            set {
+                this["Hanbun4"] = value;
             }
         }
     }

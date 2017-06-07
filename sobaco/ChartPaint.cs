@@ -453,12 +453,12 @@ namespace sobaco {
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
         }
 
-        private void bSquare_Click(object sender, EventArgs e) {
+        private void BSquare_Click(object sender, EventArgs e) {
             ChangeButton(Tools.Square);
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
         }
 
-        private void bSquareFill_Click(object sender, EventArgs e) {
+        private void BSquareFill_Click(object sender, EventArgs e) {
             ChangeButton(Tools.SquareFill);
             this.pictureBox1.MouseWheel -= new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseWheel);
         }

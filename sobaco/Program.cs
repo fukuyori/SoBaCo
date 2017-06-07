@@ -33,7 +33,7 @@ namespace sobaco {
                 price.ReadEnd = 0;
                 price.Read("1001");
                 price = null;
-            } catch (Exception ex) {
+            } catch {
                 MessageBox.Show("このソフトの利用には、\n"
                     + "パンローリング社の相場アプリケーションが必要です。\n\n"
                     + "http://www.panrolling.com/pansoft/amarket/",

@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace sobaco {
-    class MeigaraList {
+    public class MeigaraList {
         public enum Proc { ADD, INSERT };
 
         public DataTable NamesTable;
@@ -29,13 +29,11 @@ namespace sobaco {
 
         public DataTable FavoriteTable;
         public string GetFavoriteTableCode(int pos) { return (string)FavoriteTable.Rows[pos]["CODE"]; }
-        public List<string> FavoriteCodes {
-            get {
-                return FavoriteTable
-                        .AsEnumerable()
-                        .Select(x => x.Field<string>("CODE"))
-                        .ToList();
-            }
+        public List<string> GetFavoriteList() {
+            return FavoriteTable
+                    .AsEnumerable()
+                    .Select(x => x.Field<string>("CODE"))
+                    .ToList();
         }
         public string GetFavoriteTableName(int pos) { return (string)FavoriteTable.Rows[pos]["NAME"]; }
         public int FavoritetableCount { get { return FavoriteTable.Rows.Count; } }
@@ -87,7 +85,7 @@ namespace sobaco {
         /// </summary>
         /// <param name="codes"></param>
         /// <returns></returns>
-        public int FavoriteRead(IEnumerable<string> codes) {
+        public int SetFavoriteList(IEnumerable<string> codes) {
             int cnt = 0;
             if (FavoriteTable != null)
                 FavoriteTable.Clear();
@@ -118,7 +116,7 @@ namespace sobaco {
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public bool FavoriteAdd(string s, Proc p) {
+        public bool AddFavorite(string s, Proc p) {
 
             DataRow _favoriteRow, _foundRow;
 
@@ -149,7 +147,7 @@ namespace sobaco {
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public void FavoriteSub(string s) {
+        public void SubFavorite(string s) {
 
             DataRow[] removeRow = FavoriteTable
                                     .AsEnumerable()
@@ -161,7 +159,7 @@ namespace sobaco {
         /// <summary>
         /// お気に入り全削除
         /// </summary>
-        public void FavoriteClear() {
+        public void ClearFavorite() {
             while (FavoritetableCount > 0)
                 FavoriteTable.Clear();
         }
