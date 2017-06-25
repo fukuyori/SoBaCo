@@ -579,7 +579,7 @@ namespace sobaco {
             System.Windows.Forms.Cursor _Cursor = this.Cursor;
             this.Cursor = Cursors.WaitCursor;
 
-            var oldMeigara = MyMeigara;
+            var oldMeigara =  MyMeigara;
 
             try {
                 MyMeigara = new Meigara(s, MyConfig.IdouheikinScales);
@@ -589,11 +589,16 @@ namespace sobaco {
                     MyConfig.AveStep);
             } catch {
                 MyMeigara.Dispose();
-                MyMeigara = oldMeigara;
-                MyMeigara.MakeTable(MyMeigara.PlotEnd,
-                    CandleSizeList[(int)MyConfig.CandleSize].Days,
-                    MyConfig.ChartScale,
-                    MyConfig.AveStep);
+                MyMeigara = null;
+                if (oldMeigara != null)
+                {
+                    MyMeigara = oldMeigara;
+                    
+                    MyMeigara.MakeTable(MyMeigara.PlotEnd,
+                        CandleSizeList[(int)MyConfig.CandleSize].Days,
+                        MyConfig.ChartScale,
+                        MyConfig.AveStep);
+                }
                 Debug.WriteLine("MakeTableAndDraw Error : " + s);
                 this.Cursor = _Cursor;
                 return;

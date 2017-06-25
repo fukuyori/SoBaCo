@@ -232,22 +232,22 @@ namespace sobaco {
         }
 
         private void ToolStripButton7_Click(object sender, EventArgs e) {
-            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
+            MyConfig.IdouheikinLineWidth[1] = CycleSw(MyConfig.IdouheikinLineWidth[1], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton8_Click(object sender, EventArgs e) {
-            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
+            MyConfig.IdouheikinLineWidth[2] = CycleSw(MyConfig.IdouheikinLineWidth[2], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton9_Click(object sender, EventArgs e) {
-            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
+            MyConfig.IdouheikinLineWidth[3] = CycleSw(MyConfig.IdouheikinLineWidth[3], 3);
             DrawTable(MyMeigara, chart1);
         }
 
         private void ToolStripButton10_Click(object sender, EventArgs e) {
-            MyConfig.IdouheikinLineWidth[0] = CycleSw(MyConfig.IdouheikinLineWidth[0], 3);
+            MyConfig.IdouheikinLineWidth[4] = CycleSw(MyConfig.IdouheikinLineWidth[4], 3);
             DrawTable(MyMeigara, chart1);
         }
 
