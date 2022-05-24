@@ -36,29 +36,29 @@
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.daily1 = new System.Windows.Forms.NumericUpDown();
-            this.weekly1 = new System.Windows.Forms.NumericUpDown();
-            this.monthly1 = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.monthly2 = new System.Windows.Forms.NumericUpDown();
-            this.weekly2 = new System.Windows.Forms.NumericUpDown();
-            this.daily2 = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.monthly3 = new System.Windows.Forms.NumericUpDown();
-            this.weekly3 = new System.Windows.Forms.NumericUpDown();
-            this.daily3 = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.monthly4 = new System.Windows.Forms.NumericUpDown();
-            this.weekly4 = new System.Windows.Forms.NumericUpDown();
-            this.daily4 = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
             this.monthly5 = new System.Windows.Forms.NumericUpDown();
             this.weekly5 = new System.Windows.Forms.NumericUpDown();
             this.daily5 = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
+            this.monthly4 = new System.Windows.Forms.NumericUpDown();
+            this.weekly4 = new System.Windows.Forms.NumericUpDown();
+            this.daily4 = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.monthly3 = new System.Windows.Forms.NumericUpDown();
+            this.weekly3 = new System.Windows.Forms.NumericUpDown();
+            this.daily3 = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.monthly2 = new System.Windows.Forms.NumericUpDown();
+            this.weekly2 = new System.Windows.Forms.NumericUpDown();
+            this.daily2 = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.monthly1 = new System.Windows.Forms.NumericUpDown();
+            this.weekly1 = new System.Windows.Forms.NumericUpDown();
+            this.daily1 = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -66,21 +66,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.daily1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.monthly5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.weekly5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.daily5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily1)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -253,126 +253,59 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "移動平均線　ユーザー定義";
             // 
-            // label5
+            // monthly5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 41);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(73, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "移動平均線１";
+            this.monthly5.Location = new System.Drawing.Point(189, 163);
+            this.monthly5.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.monthly5.Name = "monthly5";
+            this.monthly5.Size = new System.Drawing.Size(46, 19);
+            this.monthly5.TabIndex = 26;
             // 
-            // daily1
+            // weekly5
             // 
-            this.daily1.Location = new System.Drawing.Point(85, 39);
-            this.daily1.Name = "daily1";
-            this.daily1.Size = new System.Drawing.Size(46, 19);
-            this.daily1.TabIndex = 5;
+            this.weekly5.Location = new System.Drawing.Point(137, 163);
+            this.weekly5.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.weekly5.Name = "weekly5";
+            this.weekly5.Size = new System.Drawing.Size(46, 19);
+            this.weekly5.TabIndex = 25;
             // 
-            // weekly1
+            // daily5
             // 
-            this.weekly1.Location = new System.Drawing.Point(137, 39);
-            this.weekly1.Name = "weekly1";
-            this.weekly1.Size = new System.Drawing.Size(46, 19);
-            this.weekly1.TabIndex = 6;
+            this.daily5.Location = new System.Drawing.Point(85, 163);
+            this.daily5.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.daily5.Name = "daily5";
+            this.daily5.Size = new System.Drawing.Size(46, 19);
+            this.daily5.TabIndex = 24;
             // 
-            // monthly1
+            // label9
             // 
-            this.monthly1.Location = new System.Drawing.Point(189, 39);
-            this.monthly1.Name = "monthly1";
-            this.monthly1.Size = new System.Drawing.Size(46, 19);
-            this.monthly1.TabIndex = 7;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(92, 24);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(29, 12);
-            this.label10.TabIndex = 8;
-            this.label10.Text = "日足";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(144, 24);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(29, 12);
-            this.label11.TabIndex = 9;
-            this.label11.Text = "週足";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(196, 24);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(29, 12);
-            this.label12.TabIndex = 10;
-            this.label12.Text = "月足";
-            // 
-            // monthly2
-            // 
-            this.monthly2.Location = new System.Drawing.Point(189, 70);
-            this.monthly2.Name = "monthly2";
-            this.monthly2.Size = new System.Drawing.Size(46, 19);
-            this.monthly2.TabIndex = 14;
-            // 
-            // weekly2
-            // 
-            this.weekly2.Location = new System.Drawing.Point(137, 70);
-            this.weekly2.Name = "weekly2";
-            this.weekly2.Size = new System.Drawing.Size(46, 19);
-            this.weekly2.TabIndex = 13;
-            // 
-            // daily2
-            // 
-            this.daily2.Location = new System.Drawing.Point(85, 70);
-            this.daily2.Name = "daily2";
-            this.daily2.Size = new System.Drawing.Size(46, 19);
-            this.daily2.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 72);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(73, 12);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "移動平均線２";
-            // 
-            // monthly3
-            // 
-            this.monthly3.Location = new System.Drawing.Point(189, 101);
-            this.monthly3.Name = "monthly3";
-            this.monthly3.Size = new System.Drawing.Size(46, 19);
-            this.monthly3.TabIndex = 18;
-            // 
-            // weekly3
-            // 
-            this.weekly3.Location = new System.Drawing.Point(137, 101);
-            this.weekly3.Name = "weekly3";
-            this.weekly3.Size = new System.Drawing.Size(46, 19);
-            this.weekly3.TabIndex = 17;
-            // 
-            // daily3
-            // 
-            this.daily3.Location = new System.Drawing.Point(85, 101);
-            this.daily3.Name = "daily3";
-            this.daily3.Size = new System.Drawing.Size(46, 19);
-            this.daily3.TabIndex = 16;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 103);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(73, 12);
-            this.label7.TabIndex = 15;
-            this.label7.Text = "移動平均線３";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 165);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(73, 12);
+            this.label9.TabIndex = 23;
+            this.label9.Text = "移動平均線５";
             // 
             // monthly4
             // 
             this.monthly4.Location = new System.Drawing.Point(189, 132);
+            this.monthly4.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.monthly4.Name = "monthly4";
             this.monthly4.Size = new System.Drawing.Size(46, 19);
             this.monthly4.TabIndex = 22;
@@ -380,6 +313,11 @@
             // weekly4
             // 
             this.weekly4.Location = new System.Drawing.Point(137, 132);
+            this.weekly4.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.weekly4.Name = "weekly4";
             this.weekly4.Size = new System.Drawing.Size(46, 19);
             this.weekly4.TabIndex = 21;
@@ -387,6 +325,11 @@
             // daily4
             // 
             this.daily4.Location = new System.Drawing.Point(85, 132);
+            this.daily4.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.daily4.Name = "daily4";
             this.daily4.Size = new System.Drawing.Size(46, 19);
             this.daily4.TabIndex = 20;
@@ -400,35 +343,167 @@
             this.label8.TabIndex = 19;
             this.label8.Text = "移動平均線４";
             // 
-            // monthly5
+            // monthly3
             // 
-            this.monthly5.Location = new System.Drawing.Point(189, 163);
-            this.monthly5.Name = "monthly5";
-            this.monthly5.Size = new System.Drawing.Size(46, 19);
-            this.monthly5.TabIndex = 26;
+            this.monthly3.Location = new System.Drawing.Point(189, 101);
+            this.monthly3.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.monthly3.Name = "monthly3";
+            this.monthly3.Size = new System.Drawing.Size(46, 19);
+            this.monthly3.TabIndex = 18;
             // 
-            // weekly5
+            // weekly3
             // 
-            this.weekly5.Location = new System.Drawing.Point(137, 163);
-            this.weekly5.Name = "weekly5";
-            this.weekly5.Size = new System.Drawing.Size(46, 19);
-            this.weekly5.TabIndex = 25;
+            this.weekly3.Location = new System.Drawing.Point(137, 101);
+            this.weekly3.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.weekly3.Name = "weekly3";
+            this.weekly3.Size = new System.Drawing.Size(46, 19);
+            this.weekly3.TabIndex = 17;
             // 
-            // daily5
+            // daily3
             // 
-            this.daily5.Location = new System.Drawing.Point(85, 163);
-            this.daily5.Name = "daily5";
-            this.daily5.Size = new System.Drawing.Size(46, 19);
-            this.daily5.TabIndex = 24;
+            this.daily3.Location = new System.Drawing.Point(85, 101);
+            this.daily3.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.daily3.Name = "daily3";
+            this.daily3.Size = new System.Drawing.Size(46, 19);
+            this.daily3.TabIndex = 16;
             // 
-            // label9
+            // label7
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 165);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(73, 12);
-            this.label9.TabIndex = 23;
-            this.label9.Text = "移動平均線５";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 103);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(73, 12);
+            this.label7.TabIndex = 15;
+            this.label7.Text = "移動平均線３";
+            // 
+            // monthly2
+            // 
+            this.monthly2.Location = new System.Drawing.Point(189, 70);
+            this.monthly2.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.monthly2.Name = "monthly2";
+            this.monthly2.Size = new System.Drawing.Size(46, 19);
+            this.monthly2.TabIndex = 14;
+            // 
+            // weekly2
+            // 
+            this.weekly2.Location = new System.Drawing.Point(137, 70);
+            this.weekly2.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.weekly2.Name = "weekly2";
+            this.weekly2.Size = new System.Drawing.Size(46, 19);
+            this.weekly2.TabIndex = 13;
+            // 
+            // daily2
+            // 
+            this.daily2.Location = new System.Drawing.Point(85, 70);
+            this.daily2.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.daily2.Name = "daily2";
+            this.daily2.Size = new System.Drawing.Size(46, 19);
+            this.daily2.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 72);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 12);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "移動平均線２";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(196, 24);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 12);
+            this.label12.TabIndex = 10;
+            this.label12.Text = "月足";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(144, 24);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(29, 12);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "週足";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(92, 24);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(29, 12);
+            this.label10.TabIndex = 8;
+            this.label10.Text = "日足";
+            // 
+            // monthly1
+            // 
+            this.monthly1.Location = new System.Drawing.Point(189, 39);
+            this.monthly1.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.monthly1.Name = "monthly1";
+            this.monthly1.Size = new System.Drawing.Size(46, 19);
+            this.monthly1.TabIndex = 7;
+            // 
+            // weekly1
+            // 
+            this.weekly1.Location = new System.Drawing.Point(137, 39);
+            this.weekly1.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.weekly1.Name = "weekly1";
+            this.weekly1.Size = new System.Drawing.Size(46, 19);
+            this.weekly1.TabIndex = 6;
+            // 
+            // daily1
+            // 
+            this.daily1.Location = new System.Drawing.Point(85, 39);
+            this.daily1.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.daily1.Name = "daily1";
+            this.daily1.Size = new System.Drawing.Size(46, 19);
+            this.daily1.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 41);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(73, 12);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "移動平均線１";
             // 
             // SetHanbunForm
             // 
@@ -457,21 +532,21 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.daily1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.monthly4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.weekly4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.daily4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.monthly5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.weekly5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.daily5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.monthly1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.weekly1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily1)).EndInit();
             this.ResumeLayout(false);
 
         }

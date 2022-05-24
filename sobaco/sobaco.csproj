@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>sobaco</RootNamespace>
     <AssemblyName>sobaco</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -23,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.0.2.0</ApplicationVersion>
+    <ApplicationVersion>2.2.1.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -123,12 +124,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ChartPaint.resx">
       <DependentUpon>ChartPaint.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SetHanbunForm.resx">
       <DependentUpon>SetHanbunForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="InputText.resx">
       <DependentUpon>InputText.cs</DependentUpon>
@@ -159,6 +162,7 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -258,7 +262,9 @@
     <None Include="Resources\White.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Yellow.png" />
+    <None Include="C:\Users\n_fuk\OneDrive\デスクトップ\Yellow.png">
+      <Link>Resources\Yellow.png</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Dynamic_64x.png" />
@@ -287,6 +293,7 @@
     <None Include="Resources\SaveAs32.png" />
     <None Include="Resources\square.png" />
     <None Include="Resources\squarefill.png" />
+    <None Include="Resources\Orange.png" />
     <Content Include="sobaco.ico" />
   </ItemGroup>
   <ItemGroup>

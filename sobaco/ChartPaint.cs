@@ -696,10 +696,10 @@ namespace sobaco {
         }
 
         private void BtnYellow_Click(object sender, EventArgs e) {
-            PenColor = Color.Yellow;
+            PenColor = Color.Orange;
             DrawPen = new Pen(PenColor, LineWidth);
             DrawBrush = new SolidBrush(PenColor);
-            bColor.BackColor = Color.Yellow;
+            bColor.BackColor = Color.Orange;
         }
 
         /// <summary>

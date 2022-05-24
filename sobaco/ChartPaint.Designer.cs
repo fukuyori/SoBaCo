@@ -26,17 +26,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChartPaint));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.印刷ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.printDialog1 = new System.Windows.Forms.PrintDialog();
-            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.bPrint = new System.Windows.Forms.ToolStripButton();
             this.bUndo = new System.Windows.Forms.ToolStripButton();
             this.bRedo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.bNone = new System.Windows.Forms.ToolStripButton();
             this.bPen = new System.Windows.Forms.ToolStripButton();
             this.bLine = new System.Windows.Forms.ToolStripButton();
@@ -58,8 +56,10 @@
             this.中ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.細ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.極細ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.印刷ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -83,13 +83,25 @@
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.fileToolStripMenuItem.Text = "ファイル";
+            // 
+            // 印刷ToolStripMenuItem
+            // 
+            this.印刷ToolStripMenuItem.Name = "印刷ToolStripMenuItem";
+            this.印刷ToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
+            this.印刷ToolStripMenuItem.Text = "印刷";
+            this.印刷ToolStripMenuItem.Click += new System.EventHandler(this.印刷ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(101, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.exitToolStripMenuItem.Text = "閉じる";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.MnuFileExit_Click);
             // 
@@ -131,37 +143,6 @@
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 40);
-            // 
-            // printDialog1
-            // 
-            this.printDialog1.UseEXDialog = true;
-            // 
-            // panel1
-            // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 64);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(631, 484);
-            this.panel1.TabIndex = 4;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(631, 484);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
-            // 
             // bPrint
             // 
             this.bPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -191,6 +172,11 @@
             this.bRedo.Size = new System.Drawing.Size(23, 37);
             this.bRedo.Text = "やり直し";
             this.bRedo.Click += new System.EventHandler(this.BtnRedo_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 40);
             // 
             // bNone
             // 
@@ -326,11 +312,12 @@
             // bYellow
             // 
             this.bYellow.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bYellow.Image = global::sobaco.Properties.Resources.Yellow;
+            this.bYellow.Image = global::sobaco.Properties.Resources.Orange;
             this.bYellow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bYellow.Name = "bYellow";
             this.bYellow.Size = new System.Drawing.Size(23, 37);
             this.bYellow.Text = "黄";
+            this.bYellow.ToolTipText = "オレンジ";
             this.bYellow.Click += new System.EventHandler(this.BtnYellow_Click);
             // 
             // bWhite
@@ -362,7 +349,7 @@
             // 
             this.極太ToolStripMenuItem.Image = global::sobaco.Properties.Resources.w5;
             this.極太ToolStripMenuItem.Name = "極太ToolStripMenuItem";
-            this.極太ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.極太ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.極太ToolStripMenuItem.Text = "極太";
             this.極太ToolStripMenuItem.Click += new System.EventHandler(this.極太ToolStripMenuItem_Click);
             // 
@@ -370,7 +357,7 @@
             // 
             this.太ToolStripMenuItem.Image = global::sobaco.Properties.Resources.w4;
             this.太ToolStripMenuItem.Name = "太ToolStripMenuItem";
-            this.太ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.太ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.太ToolStripMenuItem.Text = "太";
             this.太ToolStripMenuItem.Click += new System.EventHandler(this.太ToolStripMenuItem_Click);
             // 
@@ -378,7 +365,7 @@
             // 
             this.中ToolStripMenuItem.Image = global::sobaco.Properties.Resources.w3;
             this.中ToolStripMenuItem.Name = "中ToolStripMenuItem";
-            this.中ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.中ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.中ToolStripMenuItem.Text = "中";
             this.中ToolStripMenuItem.Click += new System.EventHandler(this.中ToolStripMenuItem_Click);
             // 
@@ -386,7 +373,7 @@
             // 
             this.細ToolStripMenuItem.Image = global::sobaco.Properties.Resources.w2;
             this.細ToolStripMenuItem.Name = "細ToolStripMenuItem";
-            this.細ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.細ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.細ToolStripMenuItem.Text = "細";
             this.細ToolStripMenuItem.Click += new System.EventHandler(this.細ToolStripMenuItem_Click);
             // 
@@ -394,21 +381,35 @@
             // 
             this.極細ToolStripMenuItem.Image = global::sobaco.Properties.Resources.w1;
             this.極細ToolStripMenuItem.Name = "極細ToolStripMenuItem";
-            this.極細ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.極細ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.極細ToolStripMenuItem.Text = "極細";
             this.極細ToolStripMenuItem.Click += new System.EventHandler(this.極細ToolStripMenuItem_Click);
             // 
-            // 印刷ToolStripMenuItem
+            // printDialog1
             // 
-            this.印刷ToolStripMenuItem.Name = "印刷ToolStripMenuItem";
-            this.印刷ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.印刷ToolStripMenuItem.Text = "印刷";
-            this.印刷ToolStripMenuItem.Click += new System.EventHandler(this.印刷ToolStripMenuItem_Click);
+            this.printDialog1.UseEXDialog = true;
             // 
-            // toolStripSeparator2
+            // panel1
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 64);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(631, 484);
+            this.panel1.TabIndex = 4;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(631, 484);
+            this.pictureBox1.TabIndex = 3;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
             // 
             // ChartPaint
             // 
