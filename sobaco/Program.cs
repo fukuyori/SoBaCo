@@ -16,11 +16,9 @@ namespace sobaco {
             using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\")) {
                 if (ndpKey == null ||
                     ndpKey.GetValue("Release") == null ||
-                    (int)CheckFor45DotVersion((int)ndpKey.GetValue("Release")) < (int)DotNetVersion.V4_5_2) {
+                    (int)CheckFor45DotVersion((int)ndpKey.GetValue("Release")) < (int)DotNetVersion.V4_8) {
 
-                    MessageBox.Show("このソフトの利用には、.Net Framework 4.5.2以降が必要です。\n\n"
-                        + "https://www.microsoft.com/ja-JP/download/details.aspx?id=42643 \n"
-                        + "からダウンロードし、インストールをしてください。",
+                    MessageBox.Show("このソフトの利用には、.Net Framework 4.8以降が必要です。\n\n",
                             "相場子", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -57,9 +55,27 @@ namespace sobaco {
         // Checking the version using >= will enable forward compatibility, 
         // however you should always compile your code on newer versions of
         // the framework to ensure your app works the same.
-        enum DotNetVersion { No4_5 = 0, V4_5 = 1, V4_5_1 = 2, V4_5_2 = 3, V4_6 = 4};
+        enum DotNetVersion { No4_5 = 0, V4_5 = 1, V4_5_1 = 2, V4_5_2 = 3, V4_6 = 4, V4_6_1, V4_6_2, V4_7, V4_7_1, V4_7_2, V4_8};
 
         private static DotNetVersion CheckFor45DotVersion(int releaseKey) {
+            if (releaseKey >= 528040) {
+                return DotNetVersion.V4_8;
+            }
+            if (releaseKey >= 461808) {
+                return DotNetVersion.V4_7_2;
+            }
+            if (releaseKey >= 461308) {
+                return DotNetVersion.V4_7_1;
+            }
+            if (releaseKey >= 460798) {
+                return DotNetVersion.V4_7;
+            }
+            if (releaseKey >= 394802) {
+                return DotNetVersion.V4_6_2;
+            }
+            if (releaseKey >= 394254) {
+                return DotNetVersion.V4_6_1;
+            }
             if (releaseKey >= 393295) {
                 return DotNetVersion.V4_6; // "4.6 or later";
             }
