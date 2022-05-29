@@ -155,7 +155,7 @@ namespace sobaco {
                 dgv.AutoGenerateColumns = false;
                 dgv.AllowUserToResizeColumns = false;
                 dgv.AllowUserToResizeRows = false;
-                dgv.Columns[0].Width = 30;
+                dgv.Columns[0].Width = 36;
                 dgv.Columns[0].ReadOnly = true;
                 dgv.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 dgv.Columns[1].ReadOnly = true;
@@ -172,7 +172,7 @@ namespace sobaco {
             dataGridView2.AutoGenerateColumns = false;
             dataGridView2.AllowUserToResizeColumns = false;
             dataGridView2.AllowUserToResizeRows = false;
-            dataGridView2.Columns[0].Width = 30;
+            dataGridView2.Columns[0].Width = 36;
             dataGridView2.Columns[0].ReadOnly = true;
             dataGridView2.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridView2.Columns[1].ReadOnly = true;

@@ -236,6 +236,7 @@
             // 
             this.toolStripTextBox1.BackColor = System.Drawing.SystemColors.Window;
             this.toolStripTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBox1.Font = new System.Drawing.Font("Yu Gothic UI", 9F);
             this.toolStripTextBox1.MaxLength = 80;
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
@@ -469,27 +470,27 @@
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(69, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.fileToolStripMenuItem.Text = "ファイル (&F)";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.openToolStripMenuItem.Text = "お気に入りファイルを開く (&O)";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(246, 6);
             // 
             // 銘柄ファイルを保存ToolStripMenuItem
             // 
             this.銘柄ファイルを保存ToolStripMenuItem.Name = "銘柄ファイルを保存ToolStripMenuItem";
             this.銘柄ファイルを保存ToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.銘柄ファイルを保存ToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.銘柄ファイルを保存ToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.銘柄ファイルを保存ToolStripMenuItem.Text = "上書き保存 (&S)";
             this.銘柄ファイルを保存ToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
@@ -497,20 +498,20 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+A";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.saveToolStripMenuItem.Text = "名前を付けて保存 (&A)";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(246, 6);
             // 
             // exportToPDFToolStripMenuItem
             // 
             this.exportToPDFToolStripMenuItem.Name = "exportToPDFToolStripMenuItem";
             this.exportToPDFToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+E";
-            this.exportToPDFToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.exportToPDFToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.exportToPDFToolStripMenuItem.Text = "PDFに出力 (&E)";
             this.exportToPDFToolStripMenuItem.Click += new System.EventHandler(this.ExportToPDFToolStripMenuItem_Click);
             // 
@@ -518,20 +519,20 @@
             // 
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+P";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.printToolStripMenuItem.Text = "印刷 (&P)";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(245, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(246, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+X";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
             this.exitToolStripMenuItem.Text = "終了 (&X)";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -811,6 +812,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowHeadersWidth = 40;
             this.dataGridView1.RowTemplate.Height = 21;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(196, 468);

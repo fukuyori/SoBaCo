@@ -24,20 +24,21 @@ namespace sobaco {
                 }
             }
 
-            // パンローリングのActiveMarketライブラリが必要です。
-            try {
-                ActiveMarket.Prices price = new ActiveMarket.Prices();
-                price.ReadBegin = 0;
-                price.ReadEnd = 0;
-                price.Read("1001");
-                price = null;
-            } catch {
-                MessageBox.Show("このソフトの利用には、\n"
-                    + "パンローリング社の相場アプリケーションが必要です。\n\n"
-                    + "http://www.panrolling.com/pansoft/amarket/",
-                        "相場子", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //// パンローリングのActiveMarketライブラリが必要です。
+            //try {
+            //    ActiveMarket.Prices price = new ActiveMarket.Prices();
+            //    price.ReadBegin = 0;
+            //    price.ReadEnd = 0;
+            //    price.Read("8001");
+            //    price = null;
+            //}
+            //catch {
+            //    MessageBox.Show("このソフトの利用には、\n"
+            //        + "パンローリング社の相場アプリケーションが必要です。\n\n"
+            //        + "http://www.panrolling.com/pansoft/amarket/",
+            //            "相場子", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    //return;
+            //}
 
             //二重起動をチェックする
             if (System.Diagnostics.Process.GetProcessesByName(
