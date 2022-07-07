@@ -464,12 +464,16 @@ namespace sobaco {
                         if (_date < calendar.Date(Price.Begin()))
                             return null;
                         _datePos = calendar.DatePosition(_date, -1);
-                        while (Price.IsClosed(_datePos) != 0)
+                        while (Price.IsClosed(_datePos) != 0) {
                             _datePos--;
-                        if (Price.Begin() <= _datePos & _datePos <= Price.End())
-                            return _datePos;
-                        else
-                            return null;
+                            if (Price.Begin() > _datePos | _datePos > Price.End())
+                                return null;
+                        }
+                        return _datePos;
+                        //if (Price.Begin() <= _datePos & _datePos <= Price.End())
+                        //    return _datePos;
+                        //else
+                        //    return null;
                     //　日足
                     default:
                         // 日足の１つ前の開場日
