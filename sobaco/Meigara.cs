@@ -449,12 +449,12 @@ namespace sobaco {
                         if (_date < calendar.Date(Price.Begin()))
                             return null;
                         _datePos = calendar.DatePosition(_date, -1);
-                        while (Price.IsClosed(_datePos) != 0)
+                        while (Price.IsClosed(_datePos) != 0) {
                             _datePos--;
-                        if (Price.Begin() <= _datePos & _datePos <= Price.End())
-                            return _datePos;
-                        else
-                            return null;
+                            if (Price.Begin() > _datePos & _datePos > Price.End())
+                                return null;
+                        }
+                        return _datePos;
                     // 月足
                     case ChartScales.Monthly:
                         // 前の月の月末から遡った開場日
@@ -470,10 +470,6 @@ namespace sobaco {
                                 return null;
                         }
                         return _datePos;
-                        //if (Price.Begin() <= _datePos & _datePos <= Price.End())
-                        //    return _datePos;
-                        //else
-                        //    return null;
                     //　日足
                     default:
                         // 日足の１つ前の開場日
@@ -499,15 +495,15 @@ namespace sobaco {
                         //翌週の金
                         _date = _date.AddDays(12 - (int)_date.DayOfWeek);
                         _datePos = (_date > calendar.Date(Price.End())) ? Price.End() : calendar.DatePosition(_date, -1);
-                        while (Price.IsClosed(_datePos) != 0)
+                        while (Price.IsClosed(_datePos) != 0) {
                             _datePos--;
-                        if (Price.Begin() <= _datePos & _datePos <= Price.End())
-                            if (calendar.Date(_datePos) >= _dateLimit)
-                                return _datePos;
-                            else
-                                return NextDatePosition(_datePos, Directions.After);
+                            if (Price.Begin() > _datePos & _datePos > Price.End())
+                                return null;
+                        }
+                        if (calendar.Date(_datePos) >= _dateLimit)
+                            return _datePos;
                         else
-                            return null;
+                            return NextDatePosition(_datePos, Directions.After);
                     // 月足
                     case ChartScales.Monthly:
                         // 次の月の日末日から遡った開場日
@@ -520,15 +516,15 @@ namespace sobaco {
                                     DateTime.DaysInMonth(_date.AddMonths(1).Year, _date.AddMonths(1).Month));
                         _datePos = (_date > calendar.Date(Price.End())) ? Price.End() : calendar.DatePosition(_date, -1);
 
-                        while (Price.IsClosed(_datePos) != 0)
+                        while (Price.IsClosed(_datePos) != 0) {
                             _datePos--;
-                        if (Price.Begin() <= _datePos & _datePos <= Price.End())
-                            if (calendar.Date(_datePos) >= _dateLimit)
-                                return _datePos;
-                            else
-                                return NextDatePosition(_datePos, Directions.After);
+                            if (Price.Begin() > _datePos & _datePos > Price.End())
+                                return null;
+                        }
+                        if (calendar.Date(_datePos) >= _dateLimit)
+                            return _datePos;
                         else
-                            return null;
+                            return NextDatePosition(_datePos, Directions.After);
                     // 日足
                     default:
                         do {
