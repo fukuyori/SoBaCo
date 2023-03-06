@@ -17,11 +17,16 @@ namespace sobaco {
         public string GetNameTableName(int pos) { return (string)NamesTable.Rows[pos]["NAME"]; }
         public int NameTableCount { get { return NamesTable.Rows.Count; } }
         public string GetNameByCode(string code) {
-            return (string)NamesTable.AsEnumerable()
-                                     .Where(x => x.Field<string>("CODE") == code)
-                                     .Select(x => x.Field<string>("NAME"))
-                                     .First();
-        }
+                if (NamesTable.AsEnumerable().Where(XmlReadMode => XmlReadMode.Field<string>("Code") == code).Count() > 0) {
+                    return (string)NamesTable.AsEnumerable()
+                                 .Where(x => x.Field<string>("CODE") == code)
+                                 .Select(x => x.Field<string>("NAME"))
+                                 .First();
+                } else {
+                return "";
+
+                }
+            }
         public DataTable SearchTable;
         public string GetSearchTableCode(int pos) { return (string)SearchTable.Rows[pos]["CODE"]; }
         public string GetSearchTableName(int pos) { return (string)SearchTable.Rows[pos]["NAME"]; }
